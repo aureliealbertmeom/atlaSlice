@@ -24,7 +24,7 @@ simulations=['EXP15-10']
 
 # Variables considered for plots
 # It must be in the list of acceptable variables
-variables=['SSH','SSU','SSV','SSS','SST','MLD','SICONC','SITHIC']
+variables=['SSH','SSU','SSV','SSS','SST','MLD']
 
 # Type of plots 
 # It must be either a map, a section or a time-serie
@@ -36,9 +36,7 @@ plot_locs=['surf']
 
 # Region of the plot
 # This specifies the region for maps
-plot_regions=['global']
-#plot_regions=['natl','satl','windian','eindian','npac','spac','med']
-#plot_regions=['natl','satl','windian','eindian','npac','spac','med']
+plot_regions=['natl','satl','windian','eindian','npac','spac','med']
 
 # Frequency of the plots
 # It must be compatible for the simulation and variable
@@ -50,5 +48,4 @@ date_init='2012-02-22 23:00'
 date_end='2012-02-22 23:00'
 
 make_movies=True
-
 plots_to_be_sent=['6694615800']

@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 import sys
 import pandas as pd
+import numpy as np
 
 def check(item, list_items, message):
     """
@@ -87,4 +88,53 @@ def tag_from_string_date(date,style):
         tag='y'+str(year)+'m'+str(mm)+'d'+str(dd)+'h'+str(hh)
     return tag
 
+def __build_colormap__(MC, log_ctrl=0, exp_ctrl=0):
 
+    import matplotlib.colors as mplc
+
+    [ nc, n3 ] = np.shape(MC)
+
+    # Make x vector :
+    x =[]
+    for i in range(nc): x.append(255.*float(i)/((nc-1)*255.0))
+    x = np.array(x)
+    if log_ctrl > 0: x = np.log(x + log_ctrl)
+    if exp_ctrl > 0: x = np.exp(x * exp_ctrl)
+    rr = x[nc-1] ; x  = x/rr
+
+    y =np.zeros(nc)
+    for i in range(nc): y[i] = x[nc-1-i]
+
+    x = 1 - y ; rr = x[nc-1] ; x  = x/rr
+
+    vred  = [] ; vblue = [] ; vgreen = []
+
+    for i in range(nc):
+        vred.append  ([x[i],MC[i,0],MC[i,0]])
+        vgreen.append([x[i],MC[i,1],MC[i,1]])
+        vblue.append ([x[i],MC[i,2],MC[i,2]])
+
+    cdict = {'red':vred, 'green':vgreen, 'blue':vblue}
+
+    my_cm = mplc.LinearSegmentedColormap('my_colormap',cdict,256)
+
+    return my_cm
+
+def home_made_cmap(name):
+    match name:
+        case 'on3':
+            M = np.array( [
+                [ 0.,0.,0. ],               # noir
+                [ 0.,138./255.,184./255. ], # bleu
+                [ 1.,1.,1. ],               # blanc
+                [ 1.,237./255.,0 ],         # jaune
+            ] )
+        case 'on2':
+            M = np.array( [
+                [ 0.,0.,0. ],               # noir
+                [ 0.,138./255.,184./255. ], # bleu
+                [ 1.,1.,1. ],               # blanc
+            ] )
+
+    my_cmap = __build_colormap__(M, log_ctrl=0, exp_ctrl=0)
+    return my_cmap

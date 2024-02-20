@@ -24,7 +24,7 @@ simulations=['EXP15-10']
 
 # Variables considered for plots
 # It must be in the list of acceptable variables
-variables=['SSH','SSU','SSV','SSS','SST','MLD','SICONC','SITHIC']
+variables=['MOD']
 
 # Type of plots 
 # It must be either a map, a section or a time-serie
@@ -46,8 +46,8 @@ frequency='1h'
 
 # Period of the extraction
 # Must be in the format yyyy-mm-dd
-date_init='2012-02-22 23:00'
-date_end='2012-02-22 23:00'
+date_init='2012-02-09 23:00'
+date_end='2012-02-09 23:00'
 
 make_movies=True
 

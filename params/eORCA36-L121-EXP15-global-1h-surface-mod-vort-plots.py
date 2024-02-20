@@ -24,7 +24,7 @@ simulations=['EXP15-10']
 
 # Variables considered for plots
 # It must be in the list of acceptable variables
-variables=['SSH','SSU','SSV','SSS','SST','MLD','SICONC','SITHIC']
+variables=['MOD','VORT']
 
 # Type of plots 
 # It must be either a map, a section or a time-serie
