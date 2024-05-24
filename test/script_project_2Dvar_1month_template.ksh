@@ -1,0 +1,1 @@
+../slice/script_project_2Dvar_1month_template.ksh

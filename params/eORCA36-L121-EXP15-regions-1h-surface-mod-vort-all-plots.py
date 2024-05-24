@@ -45,7 +45,7 @@ frequency='1h'
 
 # Period of the extraction
 # Must be in the format yyyy-mm-dd
-date_init='2012-01-01 11:00'
+date_init='2012-01-01 23:00'
 date_end='2012-02-22 23:00'
 
 make_movies=True

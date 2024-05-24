@@ -6,7 +6,7 @@ This is a collection of data management functions
 Written in 2024-02-10 by Aurelie Albert aurelie.albert@univ-grenoble-alpes.fr
 """
 
-import sys, getopt
+import sys, getopt, os, glob
 import argparse
 
 import numpy as np
@@ -16,6 +16,8 @@ import xarray as xr
 import dask
 
 from atlas import calc as ca
+from atlas import functions as f
+from params import simulations_dict as params
 
 def get_data2D(filei,var,ttime,lev):
     ds=xr.open_dataset(filei)
@@ -32,6 +34,32 @@ def get_data2D_all_chunks(filei,var,lev):
     else:
         data=ds[var][:,lev].squeeze()
     return data
+
+def get_mdata2D_all_chunks(filei,varname,lev,maskfile,maskvar):
+    """
+    Open a file and the corresponding maskfile
+    to retrieve a 2D field, at the surface or a given vertical level
+    and mask it according to the cooresponding maskfile
+    To be provided :
+      - the name of the containing the variable to retrieve = filei
+      - the nem of the variable = varname
+      - the level at which to extract the 2D fiels = lev, if = -1 it means that the file in 2D entirely
+      - the name of the mask file = maskfile
+      - the name of the mask variable = maskvar
+    Returns :
+      - 2D xarray.DataArray
+    """
+    ds=xr.open_dataset(filei,chunks={'time_counter':1,'x':10000,'y':1000})
+    dsmask=xr.open_dataset(maskfile,chunks={'time_counter':1,'x':10000,'y':1000})
+
+    if (lev == -1):
+        data=ds[varname][:].squeeze()
+    else:
+        data=ds[varname][:,lev].squeeze()
+    mask=dsmask[maskvar].squeeze()
+    datam=data.where(mask==1)
+    return datam
+
 
 def get_data3D(filei,var):
     ds=xr.open_dataset(filei)
@@ -53,6 +81,7 @@ def get_compute_2var2D_all_chunks(filei1,filei2,var,varname1,varname2,maskname,l
     else:
         data1=ds1[varname1][:,lev].squeeze()
         data2=ds2[varname2][:,lev].squeeze()
+#to do : mask data with specific mask
 
     match var:
         case 'MOD':
@@ -73,4 +102,5 @@ def get_data2D_all(filei,var,lev):
     else:
         data=ds[var][:,lev].squeeze()
     return data
+
 

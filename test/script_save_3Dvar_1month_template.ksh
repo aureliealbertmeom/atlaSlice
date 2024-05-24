@@ -1,0 +1,1 @@
+../slice/script_save_3Dvar_1month_template.ksh

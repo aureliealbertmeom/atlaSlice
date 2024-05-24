@@ -5,6 +5,6 @@ load_conda
 
 conda activate plots
 
-cd SCRIPTDIR/scripts
+cd SCRIPTDIR
 
 python script_plot.py -mach MACHINE -config CONFIGURATION -simu SIMULATION -var VARIABLE -reg PLOTREGION -loc LOCATION -typ TYPE -freq FREQUENCY -date 'DATE'

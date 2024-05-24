@@ -47,6 +47,7 @@ def make_movies(machine,configuration,simulations,variables,plot_type,plot_locs,
                                 subprocess.call(["sed", "-i", "-e",  's/PLOT_MILIEU/'+str(plot_milieu)+'/g', scriptname])
                                 subprocess.call(["sed", "-i", "-e",  's/MOVIENAME/'+str(moviename)+'/g', scriptname])
                                 subprocess.call(["sed", "-i", "-e",  's/REGION/'+str(reg)+'/g', scriptname])
+                                subprocess.call(["sed", "-i", "-e",  's/TYP/'+str(plot_type)+'/g', scriptname])
                                 subprocess.call(["sed", "-i", "-e",  's%PLOTDIR%'+str(plotdir)+'%g', scriptname])
                                 subprocess.call(["chmod", "+x", scriptname])
                                 

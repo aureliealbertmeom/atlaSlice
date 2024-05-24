@@ -2,6 +2,9 @@
 import sys
 import pandas as pd
 import numpy as np
+import shutil
+import subprocess
+import calendar
 
 def check(item, list_items, message):
     """
@@ -15,8 +18,26 @@ def check(item, list_items, message):
     Returns:
     None
     """
-    if item not in list_items:
+    if not item_in_list(item,list_items):
         sys.exit(message)
+
+def item_in_list(item,list_items):
+    """
+    Check if the given item is in the list.
+    Return True or False
+
+    Parameters:
+    - item: The item to check in the list.
+    - list_items: The list to check for the item.
+
+    Returns:
+    Boolean
+    """
+    if item not in list_items:
+        return False
+    else:
+        return True
+
 
 def concatenate_all_names_in_list(listnames):
     """
@@ -59,7 +80,7 @@ def maskname(vardim,filetyp):
     match vardim:
         case '2D':
             match filetyp:
-                case 'gridT' | 'gridT-2D' | 'icemod' | 'flxT':
+                case 'gridT' | 'gridT-2D' | 'icemod' | 'flxT' | 'domain_noisf_v2_4.2':
                     maskname='tmaskutil'
                 case 'gridU' | 'gridU-2D':
                     maskname='umaskutil'
@@ -138,3 +159,99 @@ def home_made_cmap(name):
 
     my_cmap = __build_colormap__(M, log_ctrl=0, exp_ctrl=0)
     return my_cmap
+
+def real_time_data2D(time,var):
+    """
+    From an interrupted time vector and an associated 2D variable
+    return a continuous time vector and the associated 2D variable 
+    filled with Nan values where data is missing
+
+    Parameters:
+    - time: a time vector (not a datetime)
+    - var: a 2D field with one dimension being identical to time
+
+    Returns:
+    Bigger time and var arrays 
+    """
+    if np.ndim(var) != 2: print('ERROR in size var is not 2D');  sys.exit(0)
+    (d1,d2)=np.shape(var)
+    if len(time) != d1: print('ERROR in size length of time vector and variable does not match'); sys.exit(0)
+    tinit=time[0]
+    tend=time[-1]
+    nbh=int((tend-tinit)/3600)+1
+    real_time=np.zeros((nbh))
+    real_var=np.zeros((nbh,d2))
+    ind=0
+    for t in np.arange(nbh):
+        tt=tinit+t*3600
+        if time[ind] == tt:
+            real_time[t]=time[ind]
+            real_var[t,:]=var[ind,:]
+            ind=ind+1
+        else:
+            real_time[t]=tt
+            real_var[t,:]=np.nan*np.ones((1,d2))
+
+    return real_time,real_var
+
+def use_template(tempname, scriptname, dict_strings_values):
+    """
+    Copy a template script and replace a list of strings by chosen arguments in it
+    Parameters :
+     - name of the template script
+     - name of the resulting script
+     - a dictionary that match default string and the corresponding value we want to replace it
+    Returns :
+    None
+    """
+    shutil.copyfile(tempname,scriptname)
+    for string in dict_strings_values:
+        subprocess.call(["sed", "-i", "-e",  's%'+str(string)+'%'+str(dict_strings_values[string])+'%g',scriptname])
+
+def get_ind_xtrac_month_in_year(year, month, freq):
+    """
+    Get the temporal indexes bounding a given month for a yearly file with a given freqency of output
+    Parameters :
+      - year
+      - month
+      - frequency of the time axis
+    Returns :
+      - ti and tf the bounding indexes for the month considered
+    """
+    if calendar.isleap(int(year)):
+        nb_day_in_month=[31,29,31,30,31,30,31,31,30,31,30,31]
+    else:
+        nb_day_in_month=[31,28,31,30,31,30,31,31,30,31,30,31]
+
+    nb_per_day=int(24/int(freq[:-1]))
+    m=int(month)
+    mm1=m-1
+    if mm1==0:
+        ti=1
+        tf=31*nb_per_day
+    else:
+        tt=1
+        while mm1 > 0:
+            tt=tt+nb_per_day*nb_day_in_month[mm1-1]
+            mm1=mm1-1
+        ti=tt
+        tf=tt+nb_per_day*nb_day_in_month[m-1]-1
+
+    return ti,tf
+
+def get_ind_xtrac_day_in_month(day, freq):
+    """
+    Get the temporal indexes bounding a given day for a monthly file with a given freqency of output
+    Parameters :
+      - day
+      - frequency of the time axis
+    Returns :
+      - ti and tf the bounding indexes for the day considered
+    """
+
+    nb_per_day=int(24/int(freq[:-1]))
+    d=int(day)
+    ti=(d-1)*nb_per_day+1
+    tf=d*nb_per_day
+
+    return ti,tf
