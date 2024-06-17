@@ -32,6 +32,8 @@ if [ "${STYLE}" == "${DFS}" ]; then
 			echo $fileo
 			CDFPATH/cdfmoy -l $file -o $fileo -nc4
 			rm ${fileo}2.nc
+			fileoo=$(echo $fileo | sed 's/.nc/.nc.nc/g')
+			mv  $fileoo $fileo
 		fi
 	done
 fi

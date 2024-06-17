@@ -28,7 +28,7 @@ variables=['MOD']
 
 # Type of plots 
 # It must be either a map, a section or a time-serie
-plot_type='map_moll' #map_orthoa, map_orthoi, map_moll
+plot_type='map_orthoa' #map_orthoa, map_orthoi, map_moll
 
 # Parameters of the plot
 # This specifies the depth for maps, the coordinates for sections or time-series
@@ -44,9 +44,9 @@ frequency='1h'
 
 # Period of the extraction
 # Must be in the format yyyy-mm-dd
-date_init='2012-01-01 11:00'
-date_end='2012-01-01 11:00'
-one_frame=True
+date_init='2012-02-01 11:00'
+date_end='2012-02-01 11:00'
+one_frame=False
 ftime=11
 
 make_movies=True

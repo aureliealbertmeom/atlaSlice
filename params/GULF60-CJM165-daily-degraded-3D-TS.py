@@ -15,33 +15,34 @@ machine='adastra'
 
 # Name of the configuration
 # It must be one of the configuration outputs stored on the above machine
-configuration='DFS5.2'
+configuration='NATL60'
 
 # Name of the simulation, experiment or run
 # It must be one of the simulations for the above configuration stored on the above machine
-simulations=['DFS5.2']
+simulations=['CJM165']
 
 # Name of the regions considered for extraction
 # It must have been defined for the selected configuration
-regions=['eNATL60']
+regions=['GULF']
 
 # Name of the variables considered for extraction
 # It must be in the list of acceptable variables
-variables=['u10m','v10m']
+variables=['T','S']
 
 # Frequency of the output
 # It must be compatible for the simulation and variable
-frequency='3h'
+frequency='1d'
 
 # Extra operation after extraction of raw outputs
-operation='daily_mean' #daily_files, apply_mask, project_sosie, daily_mean
+operation='degrad3' # extract then degrad3
 
+# Perform the archive or not
+archive='Y'
 # Wether data is already sitting on the store
-inplace='Y'
 
 # Period of the extraction
 # Must be in the format yyyy-mm-dd
-date_init='2009-07-01'
-date_end='2010-06-30'
+date_init='2012-10-01'
+date_end='2013-09-30'
 
 

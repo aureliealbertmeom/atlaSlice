@@ -7,7 +7,7 @@
 #SBATCH -e extract.e%j
 #SBATCH -o extract.o%j
 #SBATCH --time=03:00:00
-#SBATCH --constraint=GENOA
+#SBATCH --constraint=HPDA
 #SBATCH --exclusive
 
 NB_NPROC=NPROCS 
