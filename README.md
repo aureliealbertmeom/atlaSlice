@@ -10,7 +10,7 @@ For instance, if I want to plot annual global SSH for a simulation that ran over
 
 ## Organization
 
-The package is organized in 6 subsections
+The package is organized in 7 subsections
 
 ### env
 The env section contain the [conda requirements file](env/plots_env.txt) that will install all the needed python librairies with the command ```conda create --name plots --file plots_env.txt```
@@ -25,5 +25,9 @@ The params section contain 3 definition scripts :
 These 3 scripts must be modified by the user to fit his/her needs, then be renamed respectively simulations_dict.py, plots_dict.py and slice_dict.py, these files already exist and contain all the informations gathered for my personnal use 
 
 A user must then define the kind of operation he/she wishes to perform and all the parameters associated in a [param file](params/example_plot_definitions.py) in accordance with what has been defined in the definition scripts.
+
+### run
+This is where the launching and execution of the scripts will happen.
+All you have to do is to link the param file you have defined previously in the param section and run the [run script](run.ksh)
 
 
