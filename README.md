@@ -18,9 +18,9 @@ The env section contain the [conda requirements file](env/plots_env.txt) that wi
 ### params 
 The params section contain 3 definition scripts : 
 
-     - a [script](params/template_simulations_dict.py) that gathers all the information about the simulations that we could want to plot or extract, on every machine and every characteristics that define them (period, frequency of outputs, name of variables, indices for regions and sections given a configuration, etc ...) 
-     - a [similar script](params/template_plots_dict.py) for the plots parameters (palettes, range of values)
-     - a [similar script](params/template_slice_dict.py) for the extraction and computation parameters 
+  - a [script](params/template_simulations_dict.py) that gathers all the information about the simulations that we could want to plot or extract, on every machine and every characteristics that define them (period, frequency of outputs, name of variables, indices for regions and sections given a configuration, etc ...) 
+  - a [similar script](params/template_plots_dict.py) for the plots parameters (palettes, range of values)
+  - a [similar script](params/template_slice_dict.py) for the extraction and computation parameters 
 
 These 3 scripts must be modified by the user to fit his/her needs, then be renamed respectively simulations_dict.py, plots_dict.py and slice_dict.py, these files already exist and contain all the informations gathered for my personnal use 
 
