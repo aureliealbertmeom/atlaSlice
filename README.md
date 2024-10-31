@@ -24,10 +24,12 @@ The params section contain 3 definition scripts :
 
 These 3 scripts must be modified by the user to fit his/her needs, then be renamed respectively simulations_dict.py, plots_dict.py and slice_dict.py, these files already exist and contain all the informations gathered for my personnal use 
 
-A user must then define the kind of operation he/she wishes to perform and all the parameters associated in a [param file](params/example_plot_definitions.py) in accordance with what has been defined in the definition scripts.
+A user must then define the kind of operation he/she wishes to perform and all the parameters associated in a [param file](params/operation/example_param.py) in accordance with what has been defined in the definition scripts.
 
 ### run
 This is where the launching and execution of the scripts will happen.
-All you have to do is to link the param file you have defined previously in the param section and run the [run script](run.ksh)
 
+A user must add the parameters file name defined in the params/operation section in the run script associated to the machine he/she is on : [run_adastra.ksh](run/run_adastra.ksh) for instance.
+
+Several operations can be added and will be performed in a row
 

@@ -41,3 +41,6 @@ def test_get_ind_xtrac_day_in_5days():
     assert f.get_ind_xtrac_day_in_5days('01','01','05','1h') == (1, 24)
     assert f.get_ind_xtrac_day_in_5days('02','01','05','1h') == (25, 48)
 
+def test_nb_time_steps():
+    assert f.nb_time_steps('2020-01-10','2020-01-15','1d') == 5.0
+    assert f.nb_time_steps('2020-01-10','2020-01-15','1h') == 120.0

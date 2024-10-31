@@ -4,8 +4,8 @@
 This is an example plots definition
 =====================================
 This is where the user defines what he/she wants to plot and where
-A beginner user may look at the params.py file to see what can be done and where
-An advanced user modifies params.py file to match their needs
+A beginner user may look at the simulations_dict.py and plots_dict.py files to see what can be done and where
+An advanced user modifies simulations_dict.py and plots_dict.py files to match their needs
 Be careful not to put a . in the name of this file
 Written in 2024-02-07 by Aurelie Albert aurelie.albert@univ-grenoble-alpes.fr
 """

@@ -321,3 +321,10 @@ def find_files_containing_1d(mylist,tag):
 
     return file_extract,tag1f,tag2f
 
+def nb_time_steps(date_init,date_end,frequency):
+    """
+    This routine computes the number of time-steps between two date given a frequency
+    """
+    dur=duration_from_string(frequency)
+    delta=pd.Timestamp(date_end)-pd.Timestamp(date_init)
+    return delta/dur
