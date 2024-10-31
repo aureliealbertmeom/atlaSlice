@@ -84,7 +84,7 @@ def maskname(vardim,filetyp):
                     maskname='tmaskutil'
                 case 'gridU' | 'gridU-2D':
                     maskname='umaskutil'
-                case 'gridV' | 'gridV-2D':
+                case 'gridV' | 'gridV-2D' | 'MOC':
                     maskname='vmaskutil'
         case '3D':
             match filetyp:
@@ -107,6 +107,13 @@ def tag_from_string_date(date,style):
         dd="{:02d}".format(day)
         hh="{:02d}".format(hour)
         tag='y'+str(year)+'m'+str(mm)+'d'+str(dd)+'h'+str(hh)
+    if style == 'dcm':
+        year=pd.Timestamp(date).year
+        month=pd.Timestamp(date).month
+        day=pd.Timestamp(date).day
+        mm="{:02d}".format(month)
+        dd="{:02d}".format(day)
+        tag='y'+str(year)+'m'+str(mm)+'d'+str(dd)
     return tag
 
 def __build_colormap__(MC, log_ctrl=0, exp_ctrl=0):
@@ -255,3 +262,62 @@ def get_ind_xtrac_day_in_month(day, freq):
     tf=d*nb_per_day
 
     return ti,tf
+
+def get_ind_xtrac_day_in_5days(tag,tag1f,freq):
+    """
+    Get the temporal indexes bounding a given day for a 5 days file with a given freqency of output
+    Parameters :
+      - tag: tag of the day considered in the form 'yyyymmdd'
+      - tag1f: tag of the first day of the 5 days period 
+      - frequency of the time axis
+    Returns :
+      - ti and tf the bounding indexes for the day considered
+    """
+    
+    tday=pd.Timestamp(tag)
+    tday1f=pd.Timestamp(tag1f)
+    delta=tday-tday1f
+    nb_per_day=int(24/int(freq[:-1]))
+    ti=int(delta.days)*nb_per_day+1
+    tf=(int(delta.days)+1)*nb_per_day
+
+    return ti,tf
+
+def find_files_containing_1d(mylist,tag):
+    """
+    Get the name of the file that contains a specific day of data among a list of files
+    Parameters :
+      - mylist : list of files eligible
+      - tag : describes the exact day we want to extract in the form 'yyyy-mm-dd'
+    Returns :
+      - file_extract : the nam of the file that contains the data for the date
+      - tag1f, tag2f : the corresponding period that contains the date
+    """
+
+    tday=pd.Timestamp(tag)
+
+    found=0
+    for files in mylist:
+        tag=files.split("_")[1]
+        tag1=tag.split("-")[0]
+        ttag2=tag.split("-")[1]
+        tag2=ttag2.split(".")[0]
+        day1=tag1[-2:]
+        day2=tag2[-2:]
+        mm1=tag1[-4:-2]
+        mm2=tag2[-4:-2]
+        yy1=tag1[:4]
+        yy2=tag2[:4]
+        tfile1=pd.Timestamp(str(yy1)+'-'+str(mm1)+'-'+str(day1))
+        tfile2=pd.Timestamp(str(yy2)+'-'+str(mm2)+'-'+str(day2))
+        if tfile1 <= tday and tday <= tfile2 :
+            found=1
+            file_extract=files
+            tag1f=tag1
+            tag2f=tag2
+
+    if found == 0:
+        sys.exit("file not found for date "+str(tday))
+
+    return file_extract,tag1f,tag2f
+

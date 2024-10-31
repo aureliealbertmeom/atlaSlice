@@ -1,13 +1,13 @@
 #! /usr/bin/env python
 
-import sys,getopt,os
+import sys,getopt,os, glob
 import argparse
 import pandas as pd
 import shutil
 import subprocess
 
 #Make sure the path to the package is in the PYTHONPATH
-from atlas import functions as f
+from functions import functions as f
 from params import simulations_dict_for_slice as params
 
 def parse_args():
@@ -46,18 +46,23 @@ def check(machine,configuration,simulations,regions,variables,frequency,date_ini
 def job_operation(machine,configuration,simulations,regions,variables,frequency,date_init,date_end,operation):
 
     #Concatenate the name of all simulations, regions, variables
-    allsimulations=f.concatenate_all_names_in_list(simulations)
     allregions=f.concatenate_all_names_in_list(regions)
-    allvariables=f.concatenate_all_names_in_list(variables)
-
-    all_dates=pd.date_range(date_init,date_end,freq='D')
 
     #Loop over the variables
     for var in variables:
-        # Define the mpmd file name and the job file
-        mpmdname='tmp_mpmd_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(var)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
-        jobname='tmp_job_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(var)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
-    
+
+        if var == 'mask':
+            # Define the mpmd file name and the job file, no dates, frequency or simulation associated with mask
+            mpmdname='tmp_mpmd_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allregions)+'_'+str(var)+'.ksh'
+            jobname='tmp_job_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allregions)+'_'+str(var)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
+        else:
+            allsimulations=f.concatenate_all_names_in_list(simulations)
+            allvariables=f.concatenate_all_names_in_list(variables)
+            all_dates=pd.date_range(date_init,date_end,freq='D')
+            # Define the mpmd file name and the job file
+            mpmdname='tmp_mpmd_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(var)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
+            jobname='tmp_job_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(var)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
+        
         shutil.copyfile('job_'+str(machine)+'_template.ksh',jobname)
         subprocess.call(["sed", "-i", "-e",  's/MPMDCONF/'+str(mpmdname)+'/g', jobname])
 
@@ -69,8 +74,41 @@ def job_operation(machine,configuration,simulations,regions,variables,frequency,
         nb_jobs=1
 
         #Determine the frequency of parallelization
+        if var == 'mask':
+            #no dates, loop over regions
+            for region in regions:
+                scriptname=('tmp_script_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(region)+'.ksh')
+                if operation == 'extract':
+                    f.use_template('script_'+str(operation)+'_mesh_mask_files_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'REGIONABR':str(params.ex[configuration][region]),'MESHHFILE':str(params.mesh_hgr[configuration][configuration]),'MESHZFILE':str(params.mesh_zgr[configuration][configuration]),'MASKFILE':str(params.mask[configuration][configuration]),'XTRACTINDICES':str(params.xy[configuration][region]),'SCPATH':str(params.scratch_path[machine]),'NCOPATH':str(params.nco_path[machine])})
+                    #Add the script to the mpmpd conf file
+                    subprocess.call(["chmod", "+x", scriptname])
+                    with open(mpmdname, 'a') as file:
+                        file.write("{}\n".format(str(nb_procs)+' ./'+str(scriptname)))
+
+                    nb_procs=nb_procs+1
+                    if nb_procs == nb_proc_max:
+                        #The job is launched
+                        subprocess.call(["sed", "-i", "-e",  's/NPROCS/'+str(nb_procs)+'/g', jobname])
+                        subprocess.call(["sbatch",jobname])
+
+                        #The next job is set up
+                        nb_jobs=nb_jobs+1
+                        nb_procs=0
+                        mpmdname='tmp_mpmd'+str(nb_jobs)+'_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allregions)+'.ksh'
+                        jobname='tmp_job'+str(nb_jobs)+'_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allregions)+'.ksh'
+                        shutil.copyfile('job_'+str(machine)+'_template.ksh',jobname)
+                        subprocess.call(["sed", "-i", "-e",  's/MPMDCONF/'+str(mpmdname)+'/g', jobname])
+
+            if nb_procs > 0:
+                #The last job is launched
+                subprocess.call(["sed", "-i", "-e",  's/NPROCS/'+str(nb_procs)+'/g', jobname])
+                subprocess.call(["sbatch",jobname])
+            exit()
+
+
+
         if params.vars_dim[var]=='2D':
-            if operation == 'daily_mean' or operation == 'project_sosie':
+            if operation == 'daily_mean' or operation == 'project_sosie' or operation[:6] == 'degrad':
                 freq_par='1m'
                 print('We are going to do '+str(operation)+' on variable '+str(var)+' in parallel by month')
                 incr_temp=pd.date_range(date_init,date_end,freq='M')
@@ -79,9 +117,12 @@ def job_operation(machine,configuration,simulations,regions,variables,frequency,
                 print('We are going to do '+str(operation)+' on variable '+str(var)+' in parallel by day')
                 incr_temp=pd.date_range(date_init,date_end,freq='D')
         if params.vars_dim[var]=='3D':
-            if operation[:6] == 'degrad':
+            if operation[:6] == 'degrad' or 'extract':
                 freq_par='1d'
-                print('We are going to degrad variable '+str(var)+' with a ratio of '+str(operation[-1])+' in parallel by day')
+                if operation[:6] == 'degrad':
+                    print('We are going to degrad variable '+str(var)+' with a ratio of '+str(operation[6:])+' in parallel by day')
+                if operation[:6] == 'extract':
+                    print('We are going to extract variable '+str(var)+' in parallel by day')
                 incr_temp=pd.date_range(date_init,date_end,freq='D')
 
         #Loop over the dates composing the period
@@ -110,11 +151,21 @@ def job_operation(machine,configuration,simulations,regions,variables,frequency,
                     if operation == 'apply_mask':
                         f.use_template('script_'+str(operation)+'_2Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(params.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'SCPATH':str(params.scratch_path[machine]),'MASKNAME':params.mask2Dname[var],'MASKFILE':params.mask[region]})
                     if operation == 'daily_files':
-                        indti,indtf=f.get_ind_xtrac_day_in_month(dd, str(frequency))
-                        f.use_template('script_'+str(operation)+'_2Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(params.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'SCPATH':str(params.scratch_path[machine]),'INDTI':indti,'INDTF':indtf})
+                        if str(params.file_frequencies[simulation][var])=='1m':
+                            indti,indtf=f.get_ind_xtrac_day_in_month(dd, str(frequency))
+                            f.use_template('script_'+str(operation)+'_2Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(params.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'SCPATH':str(params.scratch_path[machine]),'INDTI':indti,'INDTF':indtf,'NCOPATH':str(params.nco_path[machine])})
+                        if str(params.file_frequencies[simulation][var])=='5d':
+                            mylist = [files for files in glob.glob(str(params.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'/'+str(frequency)+'/'+str(configuration)+str(params.ex[configuration][region])+'-'+str(simulation)+'_????????-????????.'+str(frequency)+'_'+str(var)+'.nc')]
+                            file_extract,tag1f,tag2f=f.find_files_containing_1d(mylist,tag)
+                            indti,indtf=f.get_ind_xtrac_day_in_5days(tag,tag1f,str(frequency))
+                            f.use_template('script_'+str(operation)+'_2Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(params.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'SCPATH':str(params.scratch_path[machine]),'INDTI':indti,'INDTF':indtf,'TAG1':tag1f,'TAG2':tag2f,'NCOPATH':str(params.nco_path[machine])})
                     if operation[:6] == 'degrad':
-                        f.use_template('script_'+str(operation[:6])+'_3Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(params.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd),'RATIO':str(operation[-1]),'VARTYP':str(params.varpt[var]), 'SCPATH':str(params.scratch_path[machine]),'CDFPATH':str(params.cdf_path[machine]),'MASKFILE':str(params.mask[configuration]),'MESHHFILE':str(params.mesh_hgr[configuration]),'MESHZFILE':str(params.mesh_zgr[configuration])})
-
+                        if params.vars_dim[var]=='3D':
+                            f.use_template('script_'+str(operation[:6])+'_3Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(params.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd),'RATIO':str(operation[6:]),'VARTYP':str(params.varpt[var]), 'SCPATH':str(params.scratch_path[machine]),'CDFPATH':str(params.cdf_path[machine]),'MASKFILE':str(params.mask[configuration][region]),'MESHHFILE':str(params.mesh_hgr[configuration][region]),'MESHZFILE':str(params.mesh_zgr[configuration][region])})
+                        if params.vars_dim[var]=='2D':
+                            f.use_template('script_'+str(operation[:6])+'_2Dvar_1month_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(params.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'RATIO':str(operation[6:]),'VARTYP':str(params.varpt[var]), 'SCPATH':str(params.scratch_path[machine]),'CDFPATH':str(params.cdf_path[machine]),'MASKFILE':str(params.mask[configuration][region]),'MESHHFILE':str(params.mesh_hgr[configuration][region]),'MESHZFILE':str(params.mesh_zgr[configuration][region])})
+                    if operation == 'extract':
+                        f.use_template('script_'+str(operation)+'_3Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(params.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd),'FILETYP':str(params.filetyp[simulation][var]), 'SOURCEDIR':str(params.directory[machine][configuration][simulation]), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'XTRACTINDICES':str(params.xy[configuration][region]),'SCPATH':str(params.scratch_path[machine]),'NCOPATH':str(params.nco_path[machine])})
 
                     #Add the script to the mpmpd conf file
                     subprocess.call(["chmod", "+x", scriptname])
@@ -154,6 +205,8 @@ def make_operation(machine,configuration,simulations,regions,variables,frequency
         if params.vars_dim[var]=='2D':
             print('We are going to do '+str(operation)+' on variable '+str(var)+' month by month')
             all_month=pd.date_range(date_init,date_end,freq='M')
+            if len(all_month)==0:
+                sys.exit("Not enough months to perform the operation by month")
             for ym in all_month:
                 year=ym.year
                 month=ym.month
@@ -206,13 +259,11 @@ def main():
     da = __import__(param_dataset)
 
     print('Operation '+str(da.operation)+' for '+str(param_dataset)+' is launched')
-    match da.operation:
-        case 'apply_mask' | 'daily_files' | 'daily_mean' | 'project_sosie':
+    match da.job:
+        case 'Y':
             job_operation(da.machine,da.configuration,da.simulations,da.regions,da.variables,da.frequency,da.date_init,da.date_end,da.operation)
-        case 'extract':
+        case 'N':
             make_operation(da.machine,da.configuration,da.simulations,da.regions,da.variables,da.frequency,da.date_init,da.date_end,da.operation)
-    if da.operation[:6] == 'degrad':
-        job_operation(da.machine,da.configuration,da.simulations,da.regions,da.variables,da.frequency,da.date_init,da.date_end,da.operation)
 
 
 if __name__ == "__main__":

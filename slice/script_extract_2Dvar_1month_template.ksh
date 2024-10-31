@@ -12,7 +12,7 @@ MM=MONTH
 TYP=FILETYP
 SDIR=SOURCEDIR
 STYLE=STYLENOM
-XY=XTRACTINDICES
+XY="XTRACTINDICES"
 
 TDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}/${REG}/${FREQ}
 mkdir -p $TDIR
@@ -22,6 +22,7 @@ echo "We are in " $TDIR
 
 BRODEAU_NST=brodeau_nst
 BRODEAU_eNATL=brodeau_enatl
+BRODEAU_eNATL_SPINUP=brodeau_enatl_spinup
 MOLINES=molines
 
 ulimit -s unlimited
@@ -50,5 +51,27 @@ if [ "${STYLE}" == "${BRODEAU_eNATL}" ]; then
                         NCOPATH/ncks -O -F ${XY} -v ${VARNAME} $file $fileo
                 fi
         done
+fi
+
+if [ "${STYLE}" == "${BRODEAU_eNATL_SPINUP}" ]; then
+	for file in $(find ${SDIR}/${CONFIG}-${CASE}*-S/* -name ${CONFIG}-${CASE}*_${FREQ}_${YYYY}${MM}??*_${TYP}.nc); do 
+                day1=$(basename $file | awk -F_ '{print $3}')
+                day2=$(basename $file | awk -F_ '{print $4}')
+                fileo=${CONFIG}${SREG}-${CASE}_${day1}-${day2}.${FREQ}_${VAR}.nc
+                if [ ! -f  $fileo ]; then
+                        echo $fileo
+                        NCOPATH/ncks -O -F ${XY} -v ${VARNAME} $file $fileo
+                fi
+        done
+	for file in $(find ${SDIR}/${CONFIG}-${CASE}*-S/* -name ${CONFIG}-${CASE}*_${FREQ}_*_${TYP}_${YYYY}${MM}??-${YYYY}${MM}??.nc); do
+                day=$(basename $file | awk -F_ '{print $6}' | awk -F- '{print $2}' | awk -F. '{print $1}')
+                DD=$(echo "${day: -2}")
+                fileo=${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}d${DD}.${FREQ}_${VAR}.nc
+                if [ ! -f  $fileo ]; then
+                        echo $fileo
+                        NCOPATH/ncks -O -F ${XY} -v ${VARNAME} $file $fileo
+                fi
+        done
+
 fi
 

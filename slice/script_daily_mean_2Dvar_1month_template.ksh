@@ -25,7 +25,7 @@ ulimit -s unlimited
 
 SDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}/${REG}/${FREQ}
 
-if [ "${STYLE}" == "${DFS}" ]; then
+if [ "$STYLE" -eq "$DFS" ]; then
 	for file in $(ls ${SDIR}/${CONFIG}${SREG}_y${YYYY}m${MM}d??.${FREQ}_${VAR}.nc); do
 		fileo=$(basename $file | sed "s/${FREQ}/1d/g")
 		if [ ! -f  $fileo ]; then
@@ -36,7 +36,21 @@ if [ "${STYLE}" == "${DFS}" ]; then
 			mv  $fileoo $fileo
 		fi
 	done
+else
+	for file in $(ls ${SDIR}/${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}d??.${FREQ}_${VAR}.nc); do
+		fileo=$(basename $file | sed "s/${FREQ}/1d/g")
+		if [ ! -f  $fileo ]; then
+			echo $fileo
+			CDFPATH/cdfmoy -l $file -o $fileo -nc4
+			rm ${fileo}2.nc
+			fileoo=$(echo $fileo | sed 's/.nc/.nc.nc/g')
+			mv  $fileoo $fileo
+		fi
+	done
+
 fi
+
+
 
 
 

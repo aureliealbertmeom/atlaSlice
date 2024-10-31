@@ -15,8 +15,8 @@ import numpy.ma as ma
 import xarray as xr
 import dask
 
-from atlas import calc as ca
-from atlas import functions as f
+from functions import calc as ca
+from functions import functions as f
 from params import simulations_dict as params
 
 def get_data2D(filei,var,ttime,lev):

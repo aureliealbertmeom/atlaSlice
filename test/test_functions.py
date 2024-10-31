@@ -37,3 +37,7 @@ def test_get_ind_xtrac_day_in_month():
     assert f.get_ind_xtrac_day_in_month('01','1h') == (1, 24)
     assert f.get_ind_xtrac_day_in_month('02','3h') == (9, 16)
 
+def test_get_ind_xtrac_day_in_5days():
+    assert f.get_ind_xtrac_day_in_5days('01','01','05','1h') == (1, 24)
+    assert f.get_ind_xtrac_day_in_5days('02','01','05','1h') == (25, 48)
+

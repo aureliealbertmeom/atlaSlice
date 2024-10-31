@@ -6,7 +6,7 @@ import pandas as pd
 import subprocess
 
 #Make sure the path to the package is in the PYTHONPATH
-from slice import functions as f
+from functions import functions as f
 from params import simulations_dict_for_slice as params
 
 def parse_args():

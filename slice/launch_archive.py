@@ -8,7 +8,7 @@ import subprocess
 import numpy as np
 
 #Make sure the path to the package is in the PYTHONPATH
-from atlas import functions as f
+from functions import functions as f
 from params import simulations_dict_for_slice as params
 
 def parse_args():

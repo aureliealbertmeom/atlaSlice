@@ -38,6 +38,8 @@ operation='degrad3' # extract then degrad3
 
 # Perform the archive or not
 archive='Y'
+job='Y'
+
 # Wether data is already sitting on the store
 
 # Period of the extraction

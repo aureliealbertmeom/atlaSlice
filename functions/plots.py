@@ -336,3 +336,15 @@ def plot_hovmuller_lat(fig,time,lat,var,vmin,vmax,unit,cmap,title):
     ax.xaxis.set_major_formatter(xfmt)
     cbar = plt.colorbar(pcolor,orientation='horizontal',shrink=0.75, pad=0.1,label=unit)
     ax.set_title(title,size=20,y=1.08)
+
+def plot_zy(fig,dep,lat,var,vmin,vmax,unit,cmap,title):
+    ax = fig.add_subplot(111)
+    fig.set_frameon('False')
+    pcolor=ax.pcolormesh(lat,dep,var,cmap=cmap,vmin=vmin,vmax=vmax, shading='nearest')
+    #pcolor=ax.contourf(lat,dep,var,levels=np.arange(vmin,vmax,5),cmap=cmap)
+    ax.invert_yaxis()
+    plt.xlabel('latitude °N')
+    plt.ylabel('depth in m')
+    cbar = plt.colorbar(pcolor,orientation='horizontal',shrink=0.75, pad=0.1,label=unit)
+    ax.set_title(title,size=20,y=1.08)
+
