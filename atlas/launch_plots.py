@@ -13,6 +13,7 @@ import numpy as np
 from functions import plots as pl
 from functions import functions as f
 from params import simulations_dict as params
+from params import plots_dict as atlas
 
 def parse_args():
     parser=argparse.ArgumentParser(description="check dataset definition and generate the associated job")
@@ -73,7 +74,7 @@ def check_grid(machine,config,simulations,variables,plot_type,plot_locs,plot_reg
                 f.check(sloc,params.sections_list[config],'The section '+str(sloc)+' is not defined for the config '+config)
 
 
-    print('All checks have passed, we are now going to generate and launch a job that will produce a '+str(plot_type)+'of  '+str(variables)+' from simulations '+str(simulations)+' from config '+str(config)+' on machine '+str(machine))
+    print('All checks have passed, we are now going to generate and launch a job that will produce a '+str(plot_type)+' of  '+str(variables)+' from simulations '+str(simulations)+' from config '+str(config)+' on machine '+str(machine))
 
 def job(machine,config,simulations,variables,plot_type,plot_locs,plot_regions,frequency,date_init,date_end):
 
@@ -294,7 +295,7 @@ def job_grid(machine,config,simulations,variables,plot_type,plot_locs,plot_regio
     subprocess.call(["sed", "-i", "-e",  's/MPMDCONF/'+str(mpmdname)+'/g', jobname])
     #Loop over all the simulations, variables, type, region and locations of the plots requested
     nb_procs=0
-    nb_proc_max=params.mprocs[plot_type]
+    nb_proc_max=atlas.mprocs[plot_type]
     nb_jobs=1
     
 
@@ -313,7 +314,7 @@ def job_grid(machine,config,simulations,variables,plot_type,plot_locs,plot_regio
                             subprocess.call(["sed", "-i", "-e",  's/PLOTREGION/'+str(reg)+'/g', scriptname])
                             subprocess.call(["sed", "-i", "-e",  's/TYPE/'+str(plot_type)+'/g', scriptname])
                             subprocess.call(["sed", "-i", "-e",  's/LOCATION/'+str(loc)+'/g', scriptname])
-                            subprocess.call(["sed", "-i", "-e",  's%SCRIPTDIR%'+str(params.script_path[machine])+'%g', scriptname])
+                            subprocess.call(["sed", "-i", "-e",  's%SCRIPTDIR%'+str(atlas.script_path[machine])+'%g', scriptname])
                             subprocess.call(["chmod", "+x", scriptname])
                                 
                             with open(mpmdname, 'a') as file:
@@ -346,7 +347,7 @@ def main():
 
     #Create the output directory if need be for every simulations
     for sim in da.simulations:
-        dirp=params.scratch_path[da.machine]+'/'+str(da.configuration)+'/'+str(da.configuration)+'-'+str(sim)
+        dirp=atlas.scratch_path[da.machine]+'/'+str(da.configuration)+'/'+str(da.configuration)+'-'+str(sim)
         print("Creating "+str(dirp)+" if necessary")
         if not os.path.isdir(dirp):
             os.makedirs(dirp)

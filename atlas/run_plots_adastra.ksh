@@ -9,8 +9,8 @@ cd /lus/home/CT1/hmg2840/aalbert/git/atlaSlice/atlas
 
 #./clean.ksh
 
-for param in test-zyplot.py; do
-	ln -sf ../params/$param .
+for param in eNATL60-bathy-ANNA.py; do
+	ln -sf ../params/operations/$param .
 	python launch_plots.py -dataset "${param%.*}"
 done
 

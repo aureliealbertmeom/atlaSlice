@@ -5,9 +5,9 @@ source /lus/home/NAT/gda2307/aalbert/.bashrc
 load_conda
 conda activate plots
 
-cd /lus/home/CT1/ige2071/aalbert/git/atlas/slice
+cd /lus/home/CT1/hmg2840/aalbert/git/atlaSlice/slice
 
-for param in SICIL60-BLBT02-1h-TSUVW-archive-m01.py SICIL60-BLBT02-1h-TSUVW-archive-m02.py SICIL60-BLBT02-1h-TSUVW-archive-m07.py SICIL60-BLBT02-1h-TSUVW-archive-m08.py SICIL60-BLBT02-1h-TSUVW-archive-m09.py; do
-	ln -sf ../params/$param .
-	python save_dataset_extraction.py -param "${param%.*}"
+for param in aGS-LS60-BLBT02-1h-3D-W-m08.py; do
+	ln -sf ../params/operations/$param .
+	python launch_archive.py -param "${param%.*}"
 done

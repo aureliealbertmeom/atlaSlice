@@ -142,6 +142,7 @@ vars_vlims['atl']={'MOC':[-100,100]}
 # Parameters for parallelization
 
 mprocs={}
+mprocs['map']=30
 mprocs['map_noproj']=30
 mprocs['map_orthoa']=30
 mprocs['map_orthop']=30

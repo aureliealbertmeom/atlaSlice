@@ -6,7 +6,7 @@
 #SBATCH -J extract
 #SBATCH -e extract.e%j
 #SBATCH -o extract.o%j
-#SBATCH --time=03:00:00
+#SBATCH --time=06:00:00
 #SBATCH --constraint=HPDA
 #SBATCH --exclusive
 

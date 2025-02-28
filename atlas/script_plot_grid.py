@@ -6,11 +6,12 @@ import pandas as pd
 import xarray as xr
 import numpy as np
 import matplotlib.pyplot as plt
-from atlas import plots as pl
-from atlas import data as da
-from atlas import functions as f
-from atlas import calc as ca
+from functions import plots as pl
+from functions import data as da
+from functions import functions as f
+from functions import calc as ca
 from params import simulations_dict as params
+from params import plots_dict as atlas
 
 def parse_args():
     parser=argparse.ArgumentParser(description="all the plots")
@@ -33,14 +34,18 @@ def main():
     typ = parse_args().typ
     loc = parse_args().loc
 
-    dirp=params.scratch_path[machine]+'/'+str(config)+'/'+str(config)+'-'+str(sim)
+    dirp=atlas.scratch_path[machine]+'/'+str(config)+'/'+str(config)+'-'+str(sim)
 
 
     print ('Plotting '+str(var)+' for configuration '+str(config))
 
     dirf=params.directory[machine][config][sim]
 
-    files=glob.glob(dirf+'/'+str(config)+'_'+str(params.filetyp[sim][var])+'.nc')
+    if reg == config:
+        files=glob.glob(dirf+'/'+str(config)+'_'+str(params.filetyp[sim][var])+'.nc')
+    else:
+        files=glob.glob(dirf+'/'+str(config)+str(reg)+'_'+str(params.filetyp[sim][var])+'.nc*')
+
 
     if len([name for name in files if os.path.isfile(name)]) == 1:
 
@@ -48,14 +53,14 @@ def main():
 
         if not os.path.isfile(plotname):
             filein=files[0]
-            filemask = params.maskfile[machine][sim]
+            filemask = params.maskfile[machine][sim][reg]
             dsmask=xr.open_dataset(filemask)
-            mask0=dsmask[f.maskname(params.vars_dim[var],params.filetyp[sim][var])][0]
+            mask0=dsmask[f.maskname(params.vars_dim[var],params.filetyp[config][sim][var])][0]
             
             if loc == 'surf':
-                var0=da.get_data2D_all_chunks(filein,params.vars_name[sim][var],-1)
+                var0=da.get_data2D_all_chunks(filein,params.vars_name[config][sim][var],-1)
 
-            plottitle=str(config)+' '+params.vars_longname[var]
+            plottitle=str(config)+' '+atlas.vars_longname[var]
     
             if typ == 'map':
                 lat0=dsmask['nav_lat']
@@ -63,27 +68,30 @@ def main():
                 if reg == 'npole' or reg == 'spole':
                     fig = plt.figure(figsize=(30,30))
                 else:
-                    nxx=np.abs(params.latlon_lims[config][reg][1]-params.latlon_lims[config][reg][0])
-                    nyy=np.abs(params.latlon_lims[config][reg][3]-params.latlon_lims[config][reg][2])
+                    if config in atlas.latlon_lim:
+                        if reg in atlas.latlon_lims[config]:
+                            nxx=np.abs(atlas.latlon_lims[config][reg][1]-atlas.latlon_lims[config][reg][0])
+                            nyy=np.abs(atlas.latlon_lims[config][reg][3]-atlas.latlon_lims[config][reg][2])
+                    else:
+
                     fig = plt.figure(figsize=(30,int(np.floor(30*nyy/nxx))))
     
-                plottitle=str(config)+' '+params.vars_longname[var]
                 if reg == 'npole':
-                    pl.one_map_proj_north_stereo(fig, 1, 1, 1, lon0, lat0, var0[t], params.vars_unit[var], mask0, params.vars_palette[var], params.vars_vlims[reg][var][0],params.vars_vlims[reg][var][1], plottitle)
+                    pl.one_map_proj_north_stereo(fig, 1, 1, 1, lon0, lat0, var0[t], atlas.vars_unit[var], mask0, atlas.vars_palette[var], atlas.vars_vlims[reg][var][0],atlas.vars_vlims[reg][var][1], plottitle)
 
                 elif reg == 'spole':
-                    pl.one_map_proj_south_stereo(fig, 1, 1, 1, lon0, lat0, var0[t], params.vars_unit[var], mask0, params.vars_palette[var], params.vars_vlims[reg][var][0],params.vars_vlims[reg][var][1], plottitle)
+                    pl.one_map_proj_south_stereo(fig, 1, 1, 1, lon0, lat0, var0[t], atlas.vars_unit[var], mask0, atlas.vars_palette[var], atlas.vars_vlims[reg][var][0],atlas.vars_vlims[reg][var][1], plottitle)
 
                 else:
-                    pl.one_map_proj_plate_carree_zoom(fig, 1, 1, 1, lon0, lat0, var0, params.vars_unit[var], mask0, params.vars_palette[var], params.vars_vlims[reg][var][0],params.vars_vlims[reg][var][1], plottitle,params.latlon_lims[config][reg][0],params.latlon_lims[config][reg][1],params.latlon_lims[config][reg][2],params.latlon_lims[config][reg][3])
+                    pl.one_map_proj_plate_carree_zoom(fig, 1, 1, 1, lon0, lat0, var0, atlas.vars_unit[var], mask0, atlas.vars_palette[var], atlas.vars_vlims[reg][var][0],atlas.vars_vlims[reg][var][1], plottitle,atlas.latlon_lims[config][reg][0],atlas.latlon_lims[config][reg][1],atlas.latlon_lims[config][reg][2],atlas.latlon_lims[config][reg][3])
 
 
             elif typ == 'map_noproj':
-                nxx=params.xylims[config][reg][1]-params.xylims[config][reg][0]
-                nyy=params.xylims[config][reg][3]-params.xylims[config][reg][2]
+                nxx=atlas.xylims[config][reg][1]-atlas.xylims[config][reg][0]
+                nyy=atlas.xylims[config][reg][3]-atlas.xylims[config][reg][2]
                 fig = plt.figure(figsize=(30,int(np.floor(30*nyy/nxx))))
 
-                pl.one_map_noproj_zoom(fig,1,1,1,var0[t],params.vars_unit[var],mask0,params.vars_palette[var],params.vars_vlims[reg][var][0],params.vars_vlims[reg][var][1],plottitle,params.xylims[config][reg][0],params.xylims[config][reg][1],params.xylims[config][reg][2],params.xylims[config][reg][3]);
+                pl.one_map_noproj_zoom(fig,1,1,1,var0[t],atlas.vars_unit[var],mask0,atlas.vars_palette[var],atlas.vars_vlims[reg][var][0],atlas.vars_vlims[reg][var][1],plottitle,atlas.xylims[config][reg][0],atlas.xylims[config][reg][1],atlas.xylims[config][reg][2],atlas.xylims[config][reg][3]);
 
 
 

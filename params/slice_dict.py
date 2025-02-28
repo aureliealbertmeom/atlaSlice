@@ -1,14 +1,21 @@
 
 # Directories for soecific tools on each machine
 
+script_path={}
+script_path['adastra']='/lus/home/CT1/hmg2840/aalbert/git/atlaSlice/slice'
+
 nco_path={}
-nco_path['adastra']='/lus/home/CT1/hmg2840/aalbert/.conda/envs/nco/bin'
+nco_path['adastra']='/opt/software/gaia/prod/3.2.0/__spack_path_placeholder__/__spack_path_placeholder__/__spack_path_placeholder__/__spack_path_plac/nco-5.1.9-gcc-12.1.generic-3z7d/bin/'
 
 cdf_path={}
 cdf_path['adastra']='/lus/work/CT1/hmg2840/aalbert/git/CDFTOOLS/bin/'
 
 sosie_path={}
 sosie_path['adastra']='/lus/work/CT1/hmg2840/aalbert/DEV/sosie'
+
+scratch_path={}
+scratch_path['adastra']='/lus/store/CT1/hmg2840/aalbert'
+#scratch_path['adastra']='/lus/scratch/CT1/hmg2840/aalbert/TMPEXTRACT'
 
 # Name of extractions in short
 
@@ -22,6 +29,13 @@ ex['eNATL60']['SICILext']='SICILext'
 ex['eNATL60']['SICILe']='SICILe'
 ex['eNATL60']['CARA']='CARA'
 ex['eNATL60']['UKFR']='UKFR'
+ex['eNATL60']['aGS']='aGS'
+ex['eNATL60']['aLS']='aLS'
+ex['eNATL60']['aMNA']='aMNA'
+ex['eNATL60']['aMNA1']='aMNA1'
+ex['eNATL60']['aMNA2']='aMNA2'
+ex['eNATL60']['aMNA3']='aMNA3'
+ex['eNATL60']['aMNA4']='aMNA4'
 ex['DFS5.2']={}
 ex['DFS5.2']['NATL60']='NATL60'
 ex['DFS5.2']['eNATL60']='eNATL60'

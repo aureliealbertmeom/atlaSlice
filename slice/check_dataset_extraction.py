@@ -7,7 +7,8 @@ import subprocess
 
 #Make sure the path to the package is in the PYTHONPATH
 from functions import functions as f
-from params import simulations_dict_for_slice as params
+from params import simulations_dict as params
+from params import slice_dict as sliced
 
 def parse_args():
     parser=argparse.ArgumentParser(description="check if the requested extractions defined in dataset have been performed")
@@ -22,29 +23,29 @@ def check(machine,configuration,simulations,regions,variables,frequency,date_ini
             nb_month=0
             nb_day=0
             for var in variables:
-                if params.file_frequencies[simulation][var]=='1d':
+                if params.frequencies_file[configuration][simulation][var]=='1d':
                     all_day=pd.date_range(date_init,date_end,freq='D')
                     nb_day=nb_day+len(all_day)
-                if params.file_frequencies[simulation][var]=='1m':
+                if params.frequencies_file[configuration][simulation][var]=='1m':
                     all_month=pd.date_range(date_init,date_end,freq='M')
                     nb_month=nb_month+len(all_month)
             nb_files_expected=nb_month+nb_day
-            tdir=str(params.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'/'+str(frequency)
-            nb_files_obtained=len([name for name in os.listdir(tdir) if os.path.isfile(tdir+'/'+name)])
+            tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'/'+str(frequency)
+            nb_files_obtained=len([name for name in glob.glob(tdir+'/*.nc') if os.path.isfile(name)])
             print(str(nb_files_obtained)+' out of '+str(nb_files_expected)+' files were extracted for simulation '+str(simulation)+' and region '+str(region)+' in '+str(tdir))
 
             if nb_files_obtained != nb_files_expected:
                 for var in variables:
-                    if params.file_frequencies[simulation][var]=='1d':
+                    if params.frequencies_file[configuration][simulation][var]=='1d':
                         all_day=pd.date_range(date_init,date_end,freq='D')
                         nb_files_expected=len(all_day)
                         nb_day=nb_day+len(all_day)
-                        nb_files_obtained=len([name for name in glob.glob(tdir+'/*'+str(var)+'*') if os.path.isfile(name)])
+                        nb_files_obtained=len([name for name in glob.glob(tdir+'/*_'+str(var)+'*.nc') if os.path.isfile(name)])
                         print(str(nb_files_obtained)+' out of '+str(nb_files_expected)+' files were extracted for '+str(var)+' from simulation '+str(simulation)+' and region '+str(region)+' in '+str(tdir))
-                    if params.file_frequencies[simulation][var]=='1m':
+                    if params.frequencies_file[configuration][simulation][var]=='1m':
                         all_month=pd.date_range(date_init,date_end,freq='M')
                         nb_files_expected=len(all_month)
-                        nb_files_obtained=len([name for name in glob.glob(tdir+'/*'+str(var)+'*') if os.path.isfile(name)])
+                        nb_files_obtained=len([name for name in glob.glob(tdir+'/*_'+str(var)+'*.nc') if os.path.isfile(name)])
                         print(str(nb_files_obtained)+' out of '+str(nb_files_expected)+' files were extracted for '+str(var)+' from simulation '+str(simulation)+' and region '+str(region)+' in '+str(tdir))
 
 

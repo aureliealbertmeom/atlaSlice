@@ -12,7 +12,10 @@ MM=MONTH
 TYP=FILETYP
 SDIR=SOURCEDIR
 STYLE=STYLENOM
-XY="XTRACTINDICES"
+X1=XX1
+X2=XX2
+Y1=YY1
+Y2=YY2
 
 TDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}/${REG}/${FREQ}
 mkdir -p $TDIR
@@ -36,7 +39,7 @@ if [ "${STYLE}" == "${BRODEAU_NST}" ]; then
 		fileo=${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}d${DD1}-d${DD2}.${FREQ}_${VAR}.nc
 		if [ ! -f  $fileo ]; then
 			echo $fileo
-			NCOPATH/ncks -O -F ${XY} -v ${VARNAME} $file $fileo
+			NCOPATH/ncks -O -F -d x,$X1,$X2 -d y,$Y1,$Y2 -v ${VARNAME} $file $fileo
 		fi
 	done
 fi
@@ -48,7 +51,7 @@ if [ "${STYLE}" == "${BRODEAU_eNATL}" ]; then
                 fileo=${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}d${DD}.${FREQ}_${VAR}.nc
                 if [ ! -f  $fileo ]; then
                         echo $fileo
-                        NCOPATH/ncks -O -F ${XY} -v ${VARNAME} $file $fileo
+                        NCOPATH/ncks -O -F -d x,$X1,$X2 -d y,$Y1,$Y2 -v ${VARNAME} $file $fileo
                 fi
         done
 fi
@@ -60,7 +63,7 @@ if [ "${STYLE}" == "${BRODEAU_eNATL_SPINUP}" ]; then
                 fileo=${CONFIG}${SREG}-${CASE}_${day1}-${day2}.${FREQ}_${VAR}.nc
                 if [ ! -f  $fileo ]; then
                         echo $fileo
-                        NCOPATH/ncks -O -F ${XY} -v ${VARNAME} $file $fileo
+                        NCOPATH/ncks -O -F -d x,$X1,$X2 -d y,$Y1,$Y2 -v ${VARNAME} $file $fileo
                 fi
         done
 	for file in $(find ${SDIR}/${CONFIG}-${CASE}*-S/* -name ${CONFIG}-${CASE}*_${FREQ}_*_${TYP}_${YYYY}${MM}??-${YYYY}${MM}??.nc); do
@@ -69,7 +72,7 @@ if [ "${STYLE}" == "${BRODEAU_eNATL_SPINUP}" ]; then
                 fileo=${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}d${DD}.${FREQ}_${VAR}.nc
                 if [ ! -f  $fileo ]; then
                         echo $fileo
-                        NCOPATH/ncks -O -F ${XY} -v ${VARNAME} $file $fileo
+                        NCOPATH/ncks -O -F -d x,$X1,$X2 -d y,$Y1,$Y2 -v ${VARNAME} $file $fileo
                 fi
         done
 

@@ -80,7 +80,7 @@ def maskname(vardim,filetyp):
     match vardim:
         case '2D':
             match filetyp:
-                case 'gridT' | 'gridT-2D' | 'icemod' | 'flxT' | 'domain_noisf_v2_4.2':
+                case 'gridT' | 'gridT-2D' | 'icemod' | 'flxT' | 'domain_noisf_v2_4.2' | 'BATHY_GEBCO_2014_2D_msk_v3_merg':
                     maskname='tmaskutil'
                 case 'gridU' | 'gridU-2D':
                     maskname='umaskutil'
@@ -114,6 +114,22 @@ def tag_from_string_date(date,style):
         mm="{:02d}".format(month)
         dd="{:02d}".format(day)
         tag='y'+str(year)+'m'+str(mm)+'d'+str(dd)
+    return tag
+
+def tag_from_panda_day(dm):
+    year=dm.year
+    month=dm.month
+    mm="{:02d}".format(month)
+    day=dm.day
+    dd="{:02d}".format(day)
+    tag='y'+str(year)+'m'+str(mm)+'d'+str(dd)
+    return tag
+
+def tag_from_panda_month(dm):
+    year=dm.year
+    month=dm.month
+    mm="{:02d}".format(month)
+    tag='y'+str(year)+'m'+str(mm)
     return tag
 
 def __build_colormap__(MC, log_ctrl=0, exp_ctrl=0):
