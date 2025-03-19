@@ -13,6 +13,11 @@ INPLACE=YON
 TDIR=SCPATH
 STDIR=STPATH/${CONFIG}/${CONFIG}-${CASE}-S/${FREQ}/${REG}
 
+if [ ! -d $TDIR ]; then
+	echo "Source directory does not exist, aborting operation"
+	exit
+fi
+
 ulimit -s unlimited
 
 if [ $INPLACE == 'Y' ]; then

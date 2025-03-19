@@ -11,7 +11,7 @@ YYYY=YEAR
 MM=MONTH
 DD=DAY
 
-SDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}/${REG}/${FREQ}
+SDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}-S/${FREQ}/${REG}
 cd $SDIR
 
 echo "We are in " $SDIR
@@ -30,20 +30,20 @@ if [ ! -f mesh_zgr.nc ]; then
 	cp MESHZFILE mesh_zgr.nc
 fi
 
-if [ ${VARNAME} -eq votemper ]; then
+if [ ${VARNAME} == votemper ]; then
 	VARSAL=vosaline
 fi
-if [ ${VAR} -eq T ]; then
+if [ ${VAR} == T ]; then
 	VARS=S
 fi
 
 
 for file in $(ls ${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}d${DD}.${FREQ}_${VAR}.nc); do
-	files=$(echo $file | sed -i 's/${VAR}/${VARS}/g')
+	files=$(echo $file | sed "s/${VAR}.nc/${VARS}.nc/g")
 	fileo=${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}d${DD}.${FREQ}_buoyancy.nc
 	if [ ! -f  $fileo ]; then
 		echo $fileo
-		CDFPATH/cdfsig0 -t ${file} -s ${files} -tem ${VARNAME} -sal ${VARSAL} -nc4 -o ${fileo}
+		CDFPATH/cdfsig0 -t ${file} -s ${files} -tem ${VARNAME} -sal ${VARSAL} -teos10 -nc4 -o ${fileo}
 	fi
 done
 

@@ -102,6 +102,9 @@ mesh_hgr['adastra']['eNATL60']={}
 mesh_hgr['adastra']['eNATL60']['eNATL60']='/lus/store/CT1/hmg2840/brodeau/eNATL60/eNATL60-I/mesh_hgr_eNATL60_3.6.nc'
 mesh_hgr['adastra']['eNATL60']['CARA']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60CARA_3.6.nc'
 mesh_hgr['adastra']['eNATL60']['UKFR']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60UKFR_3.6.nc'
+mesh_hgr['adastra']['eNATL60']['aGS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60aGS_3.6.nc'
+mesh_hgr['adastra']['eNATL60']['aLS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60aLS_3.6.nc'
+mesh_hgr['adastra']['eNATL60']['aMNA']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60aMNA_3.6.nc'
 
 mesh_zgr={}
 mesh_zgr['adastra']={}
@@ -112,6 +115,9 @@ mesh_zgr['adastra']['eNATL60']={}
 mesh_zgr['adastra']['eNATL60']['eNATL60']='/lus/store/CT1/hmg2840/brodeau/eNATL60/eNATL60-I/mesh_zgr_eNATL60_3.6.nc'
 mesh_zgr['adastra']['eNATL60']['CARA']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60CARA_3.6.nc'
 mesh_zgr['adastra']['eNATL60']['UKFR']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60UKFR_3.6.nc'
+mesh_zgr['adastra']['eNATL60']['aGS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60aGS_3.6.nc'
+mesh_zgr['adastra']['eNATL60']['aLS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60aLS_3.6.nc'
+mesh_zgr['adastra']['eNATL60']['aMNA']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60aMNA_3.6.nc'
 
 # All the regions we can extract or plot in 2D maps for each configuration
 
@@ -167,7 +173,7 @@ xy['NATL60']['GULF']=[929,1667,379,1306]
 
 variable_list=['SSH','SSU','SSV','SSS','SST','T','S','U','V','W','TAUM','TAUBOT','QTOCE','QSROCE','QSBOCE','QNSOCE','QLWOCE','QLAOCE','PRECIP','EVAPOCE',
                'EMPMR','WINDSP','RHOAIR','MLD','SBU','TAUUO','SBV','TAUVO','SICONC','SITHIC','MOD','VORT','NETDHEATFLX','SWDHEATFLX','QNS','LDHEATFLX',
-               'LWDHEATFLX','SDHEATFLX','NETUPWFLX','DSALTFLX','DAMPWFLX','bathy','MOC','u10','v10','u10m','v10m','BOTU','BOTV']
+               'LWDHEATFLX','SDHEATFLX','NETUPWFLX','DSALTFLX','DAMPWFLX','bathy','MOC','u10','v10','u10m','v10m','BOTU','BOTV','buoyancy']
 
 
 vars_dim={}
@@ -175,7 +181,7 @@ for var in ['SSH','SSU','SSV','SSS','SST','TAUM','TAUBOT','QTOCE','QSROCE','QSBO
             'RHOAIR','MLD','SBU','TAUUO','SBV','TAUVO','SICONC','SITHIC','NETDHEATFLX','SWDHEATFLX','QNS','LDHEATFLX','LWDHEATFLX','SDHEATFLX',
             'NETUPWFLX','DSALTFLX','DAMPWFLX','MOD','VORT','bathy','MOC','u10','v10','u10m','v10m','BOTU','BOTV']:
     vars_dim[var]='2D'
-for var in ['T','S','U','V','W']:
+for var in ['T','S','U','V','W','buoyancy']:
     vars_dim[var]='3D'
 
 
@@ -184,7 +190,7 @@ vars_name['eNATL60']={}
 for sim in ['BLBT02','BLB002','BLBT01','BLB001','BLBT02X','BLB002X']:
     vars_name['eNATL60'][sim]={'SSH':'sossheig','SSU':'sozocrtx','SSV':'somecrty','SST':'sosstsst','SSS':'sosaline','MLD':'somxl010',
                                'BOTU':'bozocrtx','BOTV':'bomecrty','T':'votemper','S':'vosaline','U':'vozocrtx','V':'vomecrty','W':'vovecrtz',
-                               'MOC':'zomsfglo','bathy':'Bathymetry'}
+                               'MOC':'zomsfglo','bathy':'Bathymetry','buoyancy':'vosigma0'}
 vars_name['CALEDO60']={}
 for simu in ['TRPC12NT0','TRPC12N00']:
 	vars_name['CALEDO60'][simu]={'SSH':'zos','SSU':'uos','SSV':'vos'}
@@ -234,7 +240,7 @@ mask2Dname['u10']='umaskutil'
 mask2Dname['v10']='vmaskutil'
 
 depname={}
-for var in ['T','S','MOD','VORT']:
+for var in ['T','S','MOD','VORT','buoyancy']:
     depname[var]='deptht'
 for var in ['U'] :
     depname[var]='depthu'
@@ -242,6 +248,36 @@ for var in ['V'] :
     depname[var]='depthv'
 for var in ['W','MOC'] :
     depname[var]='depthw'
+
+e1name={}
+for var in ['T','S','MOD','VORT','buoyancy']:
+    e1name[var]='e1t'
+for var in ['U'] :
+    e1name[var]='e1u'
+for var in ['V'] :
+    e1name[var]='e1v'
+for var in ['W','MOC'] :
+    e1name[var]='e1f'
+
+e2name={}
+for var in ['T','S','MOD','VORT','buoyancy']:
+    e2name[var]='e2t'
+for var in ['U'] :
+    e2name[var]='e2u'
+for var in ['V'] :
+    e2name[var]='e2v'
+for var in ['W','MOC'] :
+    e2name[var]='e2f'
+
+e3name={}
+for var in ['T','S','MOD','VORT','buoyancy']:
+    e3name[var]='e3t_0'
+for var in ['U'] :
+    e3name[var]='e3u_0'
+for var in ['V'] :
+    e3name[var]='e3v_0'
+for var in ['W','MOC'] :
+    e3name[var]='e3w_0'
 
 varpt={'T':'T','S':'T','SSH':'T','SST':'T','SSS':'T','SSU':'U','SSV':'V','U':'U','V':'V','W':'W','TAUM':'T','TAUBOT':'T','QTOCE':'T','QSROCE':'T',
        'QSBOCE':'T','QNSOCE':'T','QLWOCE':'T','QLAOCE':'T','PRECIP':'T','EVAPOCE':'T','EMPMR':'T','WINDSP':'T','RHOAIR':'T','MLD':'T','BOTU':'U',

@@ -33,6 +33,12 @@ def check_output_1sim_1reg(machine,configuration,simulation,region,variables,fre
                     if not os.path.exists(filed):
                         err=err+1
                         print('file '+str(filed)+' is missing')
+                if operation == 'compute_buoyancy':
+                    tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)
+                    filed=tdir+'/'+str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_'+str(tag)+'.'+str(frequency)+'_buoyancy.nc'
+                    if not os.path.exists(filed):
+                        err=err+1
+                        print('file '+str(filed)+' is missing')
             if err > 0:
                 print('A total of '+str(err)+' of '+str(var)+' files  are missing, dataset is not complete')
             else:
@@ -61,7 +67,7 @@ def check_output(machine,configuration,simulations,regions,variables,frequency,d
 
 
 def make_archive_1sim_1reg_1var(machine,configuration,simulation,region,var,frequency,date_init,date_end,operation):
-    if operation == 'extract':
+    if operation == 'extract' or operation == 'compute_buoyancy':
         if params.vars_dim[var]=='2D':
             print('We are going to archive variable '+str(var)+' year by year')
             freq_par='1y'
@@ -79,9 +85,14 @@ def make_archive_1sim_1reg_1var(machine,configuration,simulation,region,var,freq
         for year in np.arange(yeari,yearf+1):
             if operation == 'extract':
                 tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'/'+str(frequency)
-                tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'.'+str(frequency)+'_'+str(var)+'-'+str(operation)+'.tar'
+                tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'.'+str(frequency)+'_'+str(var)+'.tar'
                 savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_'+str(var)+'_'+str(frequency)+'_'+str(year)+'.ksh'
                 f.use_template('script_save_2Dvar_1year_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':str(var),'FREQUENCY':str(frequency), 'YEAR':str(year), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
+            if operation == 'compute_buoyancy':
+                tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)
+                tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'.'+str(frequency)+'_buoyancy.tar'
+                savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_buoyancy_'+str(frequency)+'_'+str(year)+'.ksh'
+                f.use_template('script_save_2Dvar_1year_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':'buoyancy','FREQUENCY':str(frequency), 'YEAR':str(year), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
             if operation[:6] == 'degrad':
                 tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'-'+str(operation)+'/'+str(frequency)
                 tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'.'+str(frequency)+'_'+str(var)+'-'+str(operation)+'.tar'
@@ -99,6 +110,11 @@ def make_archive_1sim_1reg_1var(machine,configuration,simulation,region,var,freq
                 tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'.'+str(frequency)+'_'+str(var)+'.tar'
                 savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_'+str(var)+'-'+str(operation)+'_'+str(frequency)+'_'+str(year)+str(mm)+'.ksh'
                 f.use_template('script_save_3Dvar_1month_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':str(var),'FREQUENCY':str(frequency), 'YEAR':str(year),'MONTH':str(mm), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
+            if operation == 'compute_buoyancy':
+                tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)
+                tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'.'+str(frequency)+'_buoyancy.tar'
+                savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_buoyancy_'+str(frequency)+'_'+str(year)+str(mm)+'.ksh'
+                f.use_template('script_save_3Dvar_1month_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':'buoyancy','FREQUENCY':str(frequency), 'YEAR':str(year),'MONTH':str(mm), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
             if operation[:6] == 'degrad':
                 tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'-'+str(operation)+'/'+str(frequency)
                 tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'.'+str(frequency)+'_'+str(var)+'-'+str(operation)+'.tar'

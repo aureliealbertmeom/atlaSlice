@@ -95,6 +95,12 @@ def set_up_script_1simulationu_1region_1var_nomask(machine,configuration,simulat
             f.use_template('script_'+str(operation)+'_3Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[configuration][simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd),'FILETYP':str(params.filetyp[configuration][simulation][var]), 'SOURCEDIR':str(params.directory[machine][configuration][simulation]), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'XX1':str(params.xy[configuration][region][0]),'XX2':str(params.xy[configuration][region][1]),'YY1':str(params.xy[configuration][region][2]),'YY2':str(params.xy[configuration][region][3]),'SCPATH':str(sliced.scratch_path[machine]),'NCOPATH':str(sliced.nco_path[machine])})
         else:
             return None
+    if operation == 'compute_buoyancy':
+        outputname=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)+'/'+str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'d'+str(dd)+'.'+str(frequency)+'_buoyancy.nc'
+        if not os.path.exists(outputname):
+            f.use_template('script_'+str(operation)+'_3Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[configuration][simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd),'SCPATH':str(sliced.scratch_path[machine]),'CDFPATH':str(sliced.cdf_path[machine]),'MASKFILE':str(params.maskfile[machine][configuration][region]),'MESHHFILE':str(params.mesh_hgr[machine][configuration][region]),'MESHZFILE':str(params.mesh_zgr[machine][configuration][region])})
+        else:
+            return None
 
     #Add the script to the mpmpd conf file
     subprocess.call(["chmod", "+x", scriptname])

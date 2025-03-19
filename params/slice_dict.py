@@ -4,6 +4,9 @@
 script_path={}
 script_path['adastra']='/lus/home/CT1/hmg2840/aalbert/git/atlaSlice/slice'
 
+params_path={}
+params_path['adastra']='/lus/home/CT1/hmg2840/aalbert/git/atlaSlice/params'
+
 nco_path={}
 nco_path['adastra']='/opt/software/gaia/prod/3.2.0/__spack_path_placeholder__/__spack_path_placeholder__/__spack_path_placeholder__/__spack_path_plac/nco-5.1.9-gcc-12.1.generic-3z7d/bin/'
 
@@ -14,7 +17,8 @@ sosie_path={}
 sosie_path['adastra']='/lus/work/CT1/hmg2840/aalbert/DEV/sosie'
 
 scratch_path={}
-scratch_path['adastra']='/lus/store/CT1/hmg2840/aalbert'
+#scratch_path['adastra']='/lus/store/CT1/hmg2840/aalbert'
+scratch_path['adastra']='/lus/work/CT1/hmg2840/aalbert'
 #scratch_path['adastra']='/lus/scratch/CT1/hmg2840/aalbert/TMPEXTRACT'
 
 # Name of extractions in short
@@ -43,6 +47,14 @@ ex['NATL60']={}
 ex['NATL60']['NATL60']=''
 ex['NATL60']['GULF']='GULF'
 
+# Parameters for profiles in 1°x1° boxes
+
+nb_boxes={}
+nb_boxes['eNATL60']={}
+nb_boxes['eNATL60']['aGS']=109
+nb_boxes['eNATL60']['aLS']=65
+nb_boxes['eNATL60']['aMNA']=399
+
 # Parameters for parallelization
 
 mprocs={}
@@ -52,3 +64,4 @@ mprocs['daily_files']=30
 mprocs['daily_mean']=30
 mprocs['degrad']=30
 mprocs['extract']=10
+mprocs['compute_buoyancy']=10

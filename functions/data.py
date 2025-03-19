@@ -103,4 +103,13 @@ def get_data2D_all(filei,var,lev):
         data=ds[var][:,lev].squeeze()
     return data
 
+def get_data2D_box(filei,var,imin,imax,jmin,jmax,k):
+    ds=xr.open_dataset(filei,chunks={'time_counter':1,'x':1000,'y':1000})
+    data_box=ds[var][:,jmin[k]-10:jmax[k]+10,imin[k]-10:imax[k]+10]
+    return data_box
+
+def get_data3D_box(filei,var,imin,imax,jmin,jmax,k):
+    ds=xr.open_dataset(filei,chunks={'time_counter':1,'x':1000,'y':1000})
+    data_box=ds[var][:,:,jmin[k]-10:jmax[k]+10,imin[k]-10:imax[k]+10]
+    return data_box
 
