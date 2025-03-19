@@ -33,3 +33,16 @@ A user must add the parameters file name defined in the params/operation section
 
 Several operations can be added and will be performed in a row
 
+
+## Add new scripts
+
+### In slice
+
+To add a new operation to be done on output files you must :
+
+ - create a script for the operation you want to perform, for instance script_compute_buoyancy_3Dvar_1day_template.ksh will compute buoyancy from 3D temperature and salinity
+ - modify the launch_operation.py script to include the option for the new operation buoy and the creation of the scripts from script_compute_buoyancy_3Dvar_1day_template in the function set_up_script_1simulationu_1region_1var_nomask (and in set_up_script_1simulationu_1region_1var_mask if the operation can be done on mask files)
+ - specify the option of the operation : compute_buoyancy only work with variable T and after an extraction
+ - modify slice_dict.py at least for the number of parallelized operation youcan do on one node, if some new parameters are needed make sure to complete the simulations_dict.py or slice_dict.py files
+ - make a test param file in params/tests that will try to execute the operation for one simulation, one variable, one date etc ...
+ - also modify launch_archive.py script so that the outputs could be archived
