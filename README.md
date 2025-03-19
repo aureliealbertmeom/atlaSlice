@@ -13,7 +13,7 @@ For instance, if I want to plot annual global SSH for a simulation that ran over
 The package is organized in 7 subsections
 
 ### env
-The env section contain the [conda requirements file](env/plots_env.txt) that will install all the needed python librairies with the command ```conda create --name plots --file plots_env.txt```
+The env section contain the [conda requirements file](env/plots_env.txt) that will install all the needed python librairies with the command ```conda create --name plots --file plots_env.txt``` or ```micromamba create -n plots -f plots_env.txt``` 
 
 ### params 
 The params section contain 3 definition scripts : 
