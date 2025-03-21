@@ -26,9 +26,9 @@ machine = 'adastra'
 config = 'eNATL60'
 simu = 'BLBT02'
 var = 'buoyancy'
-reg = 'aGS'
+reg = 'aMNA'
 freq = '1h'
-date = '20090801'
+date = '20090701'
 
 def read_csv(machine,reg,config):
     boxes=pd.read_csv(sliced.params_path[machine]+'/boxes/boxes_'+str(reg)+'_1x1_'+str(config)+'.csv',sep = '\t',index_col=0)
@@ -44,16 +44,25 @@ def read_csv(machine,reg,config):
 def mean_10_10_xyt(data):
     return data[:,:,10:-10,10:-10].mean(dim={'x','y','time_counter'})
 
-def compute_prof_filt_onebox(dirf,config,simu,var,date,k,imin,imax,jmin,jmax,reg,box_name):
+def compute_buoy(t,s):
+    rau0  = 1000
+    grav  = 9.81
+    buoy= -1*(grav/rau0)*sigma0(t,s)
+    return buoy
 
-    filei=dirf+'/'+str(config)+str(reg)+'-'+str(simu)+'_y'+date[0:4]+'m'+date[4:6]+'d'+date[6:9]+'.'+str(freq)+'_'+str(var)+'.nc'
-    data_box=da.get_data3D_box_from_reg(filei,params.vars_name[config][simu][var],imin,imax,jmin,jmax,k)
-    filt_data=ca.filt(data_box)
-    profile_data=mean_10_10_xyt(filt_data)
-    
-    return profile_data
+def sigma0(t,s):
+    zrau0=1000
+    zsr=np.sqrt(np.abs(s))
+    zs=s
+    zt=t
+    zr1 = ( ( ( ( 6.536332e-9*zt-1.120083e-6 )*zt+1.001685e-4)*zt - 9.095290e-3 )*zt+6.793952e-2 )*zt+999.842594
+    zr2= ( ( ( 5.3875e-9*zt-8.2467e-7 )*zt+7.6438e-5 ) *zt - 4.0899e-3 ) *zt+0.824493
+    zr3= ( -1.6546e-6*zt+1.0227e-4 ) *zt-5.72466e-3
+    zr4= 4.8314e-4
+    sigma0=( zr4*zs + zr3*zsr + zr2 ) *zs + zr1 - zrau0
+    return sigma0
 
-def compute_flux_onebox(data_box,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name):
+def compute_filt_flux_onebox(data_box,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name):
 
     #Get the velocity data
     fileu=dirf+'/'+str(config)+str(reg)+'-'+str(simu)+'_y'+date[0:4]+'m'+date[4:6]+'d'+date[6:9]+'.'+str(freq)+'_'+str(vel)+'.nc'
@@ -69,12 +78,15 @@ def compute_flux_onebox(data_box,dirf,config,simu,var,vel,date,k,imin,imax,jmin,
             data_box_velt=data_box_vel.interp(depthw=data_box.deptht)
     #Flux 
     flux_box=data_box*data_box_velt
-    return flux_box
 
-def compute_prof_flux_gradients_onebox(data_box,machine,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name):
+    #Filt
+    filt_data=ca.filt(flux_box)
+    return filt_data
+
+def compute_prof_filt_flux_gradients_onebox(data_box,machine,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name):
 
     #Get the flux
-    flux_box=compute_flux_onebox(data_box,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name)
+    filt_data=compute_filt_flux_onebox(data_box,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name)
     
     #Get grid sizes
     fileh=params.mesh_hgr[machine][config][reg]
@@ -85,24 +97,24 @@ def compute_prof_flux_gradients_onebox(data_box,machine,dirf,config,simu,var,vel
     e3t=e3.rename({'z':'deptht'})
 
     #Gradients
-    data_dx=ca.dx_var(flux_box,e1)
-    data_dy=ca.dy_var(flux_box,e2)
-    data_dz=ca.dz_var(flux_box,e3t,params.depname[var])
+    data_dx=ca.dx_var(filt_data,e1)
+    data_dy=ca.dy_var(filt_data,e2)
+    data_dz=ca.dz_var(filt_data,e3t,params.depname[var])
 
     #Mean
-    profile_data_dx=mean_10_10_xyt(data_dx)
-    profile_data_dy=mean_10_10_xyt(data_dy)
-    profile_data_dz=mean_10_10_xyt(data_dz)
+    profile_data_dx=mean_10_10_xyt(data_dx.squeeze())
+    profile_data_dy=mean_10_10_xyt(data_dy.squeeze())
+    profile_data_dz=mean_10_10_xyt(data_dz.squeeze())
     return profile_data_dx,profile_data_dy,profile_data_dz
 
 
-def compute_prof_flux_onebox(data_box,machine,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name):
+def compute_prof_filt_flux_onebox(data_box,machine,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name):
 
-    #Get the flux
-    flux_box=compute_flux_onebox(data_box,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name)
+    #Get the filtered flux
+    filt_data=compute_filt_flux_onebox(data_box,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name)
 
     #Mean
-    profile_data=mean_10_10_xyt(flux_box)
+    profile_data=mean_10_10_xyt(filt_data)
     return profile_data
 
 def make_dataset_prof_flux_onebox(profile_data,attrs,var,vel,extras,extrab):
@@ -115,13 +127,17 @@ def make_dataset_prof_flux_onebox(profile_data,attrs,var,vel,extras,extrab):
         case 'W':
             dirvel='z'
     dataset=profile_data.to_dataset(name=str(extras)+str(var)+'_flux_'+str(dirvel))
-    dataset[str(extras)+str(var)+'_flux_'+str(dirvel)].attrs=attrs
-    dataset[str(extras)+str(var)+'_flux_'+str(dirvel)].attrs['long_name']=str(extrab)+attrs['long_name']
-    dataset[str(extras)+str(var)+'_flux_'+str(dirvel)].attrs['units']=attrs['units']
+    if var == 'buoyancy':
+        dataset[str(extras)+str(var)+'_flux_'+str(dirvel)].attrs['long_name']=str(extrab)+' Buoyancy_flux_'+str(dirvel)
+        dataset[str(extras)+str(var)+'_flux_'+str(dirvel)].attrs['units']='m2/s3'
+    else:
+        dataset[str(extras)+str(var)+'_flux_'+str(dirvel)].attrs=attrs
+        dataset[str(extras)+str(var)+'_flux_'+str(dirvel)].attrs['long_name']=str(extrab)+attrs['long_name']+'_flux_'+str(dirvel)
+        dataset[str(extras)+str(var)+'_flux_'+str(dirvel)].attrs['units']=attrs['units']
 
     return dataset
 
-def write_prof_flux_gradients_onebox(machine,var,config,simu,reg,freq,date,imin,imax,jmin,jmax,box_name,k):
+def write_prof_filt_flux_gradients_onebox(machine,var,config,simu,reg,freq,date,imin,imax,jmin,jmax,box_name,k):
     # Path where the output are written
     dirf=sliced.scratch_path[machine]+'/'+str(config)+'/'+str(config)+'-'+str(simu)+'-S/'+str(freq)+'/'+str(reg)
     dirprof=dirf+'/profiles'
@@ -138,18 +154,27 @@ def write_prof_flux_gradients_onebox(machine,var,config,simu,reg,freq,date,imin,
         list_dataset=[]
 
         #Get the input data
-        filei=dirf+'/'+str(config)+str(reg)+'-'+str(simu)+'_y'+date[0:4]+'m'+date[4:6]+'d'+date[6:9]+'.'+str(freq)+'_'+str(var)+'.nc'
-        data_box=da.get_data3D_box(filei,params.vars_name[config][simu][var],imin,imax,jmin,jmax,k)
-        attrs=data_box.attrs
+        if var == 'buoyancy':
+            fileti=dirf+'/'+str(config)+str(reg)+'-'+str(simu)+'_y'+date[0:4]+'m'+date[4:6]+'d'+date[6:9]+'.'+str(freq)+'_T.nc'
+            filesi=dirf+'/'+str(config)+str(reg)+'-'+str(simu)+'_y'+date[0:4]+'m'+date[4:6]+'d'+date[6:9]+'.'+str(freq)+'_S.nc'
+            dataT=da.get_data3D_box(fileti,params.vars_name[config][simu]['T'],imin,imax,jmin,jmax,k)
+            dataS=da.get_data3D_box(filesi,params.vars_name[config][simu]['S'],imin,imax,jmin,jmax,k)
+            data_box=compute_buoy(dataT,dataS)
+            attrs=dataT.attrs
 
-        #Make datasets with the profiles to be written : first the fluxes
+        else:
+            filei=dirf+'/'+str(config)+str(reg)+'-'+str(simu)+'_y'+date[0:4]+'m'+date[4:6]+'d'+date[6:9]+'.'+str(freq)+'_'+str(var)+'.nc'
+            data_box=da.get_data3D_box(filei,params.vars_name[config][simu][var],imin,imax,jmin,jmax,k)
+            attrs=data_box.attrs
+
+        #Make datasets with the profiles to be written : first the filtered fluxes
         for vel in [ 'U', 'V', 'W' ]:
-            profile=compute_prof_flux_onebox(data_box,machine,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name)
+            profile=compute_prof_filt_flux_onebox(data_box,machine,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name)
             dataset=make_dataset_prof_flux_onebox(profile,attrs,var,vel,'','')
             list_dataset.append(dataset)
     
-            #Then the gradients fluxes
-            profile_data_dxu,dataset_data_dyu,dataset_data_dzu=compute_prof_flux_gradients_onebox(data_box,machine,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name)
+            #Then the filtered gradients fluxes
+            profile_data_dxu,dataset_data_dyu,dataset_data_dzu=compute_prof_filt_flux_gradients_onebox(data_box,machine,dirf,config,simu,var,vel,date,k,imin,imax,jmin,jmax,reg,box_name)
             dataset=make_dataset_prof_flux_onebox(profile_data_dxu,attrs,var,vel,'dx','dx gradient of ')
             list_dataset.append(dataset)
             dataset=make_dataset_prof_flux_onebox(profile_data_dxu,attrs,var,vel,'dy','dy gradient of ')
@@ -164,10 +189,10 @@ def write_prof_flux_gradients_onebox(machine,var,config,simu,reg,freq,date,imin,
         big_dataset.to_netcdf(path=profile_name,mode='w')
 
 
-print ('Averaging profiles of fluxes of '+str(var)+' and filtering it for simulation '+str(config)+'-'+str(simu)+' in 1°x1° boxes located in region '+str(reg))
+print ('Averaging profiles of filtered fluxes of '+str(var)+' for simulation '+str(config)+'-'+str(simu)+' in 1°x1° boxes located in region '+str(reg))
 
 imin,imax,jmin,jmax,box_name=read_csv(machine,reg,config)
-write_prof_flux_gradients_onebox(machine,var,config,simu,reg,freq,date,imin,imax,jmin,jmax,box_name,0)
+write_prof_filt_flux_gradients_onebox(machine,var,config,simu,reg,freq,date,imin,imax,jmin,jmax,box_name,0)
 
 
 

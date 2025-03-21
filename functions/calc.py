@@ -6,8 +6,8 @@ import numpy.ma as ma
 
 import xarray as xr
 
-#sys.path.insert(0,'/lus/work/NAT/gda2307/aalbert/DEV/git/xscale')
-#import xscale
+sys.path.insert(0,'/lus/work/NAT/gda2307/aalbert/DEV/git/xscale')
+import xscale
 
 def vorticity(u,v,e1v,e2u):
     return dx(v)/e1v - dy(u)/e2u
@@ -40,11 +40,11 @@ def dz_var(data,e3,dimdep):
 def module(u,v):
     return np.sqrt(u*u + v*v)
 
-#def filt(w):
-#    win_box2D = w.window
-#    win_box2D.set(window='hann', cutoff=20, dim=['x', 'y'], n=[30, 30],chunks={})
-#    bw = win_box2D.boundary_weights(drop_dims=[])
-#    w_LS = win_box2D.convolve(weights=bw)
-#    w_SS=w-w_LS
-#    return w_SS
+def filt(w):
+    win_box2D = w.window
+    win_box2D.set(window='hann', cutoff=20, dim=['x', 'y'], n=[30, 30],chunks={})
+    bw = win_box2D.boundary_weights(drop_dims=[])
+    w_LS = win_box2D.convolve(weights=bw)
+    w_SS=w-w_LS
+    return w_SS
 

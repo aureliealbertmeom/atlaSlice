@@ -31,7 +31,7 @@ grid_dir='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I'
 
 ## box indices 
 def read_csv(box):
-    boxes=pd.read_csv('/lus/home/CT1/hmg2840/aalbert/git/atlaSlice/slice/boxes_'+str(box)+'_1x1_eNATL60.csv',sep = '\t',index_col=0)
+    boxes=pd.read_csv('/lus/home/CT1/hmg2840/aalbert/git/atlaSlice/params/boxes/boxes_'+str(box)+'_1x1_eNATL60.csv',sep = '\t',index_col=0)
     ibox={'GS':1602,'LS':2686,'MNA':3462}
     jbox={'GS':1736,'LS':3589,'MNA':2337}
     imin=boxes['imin']-ibox[box]
