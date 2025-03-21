@@ -3,15 +3,19 @@
 
 script_path={}
 script_path['adastra']='/lus/home/CT1/hmg2840/aalbert/git/atlaSlice/slice'
+script_path['cal1']='/home/alberta/git/atlaSlice/slice'
 
 params_path={}
 params_path['adastra']='/lus/home/CT1/hmg2840/aalbert/git/atlaSlice/params'
+params_path['cal1']='/home/alberta/git/atlaSlice/params'
 
 nco_path={}
 nco_path['adastra']='/opt/software/gaia/prod/3.2.0/__spack_path_placeholder__/__spack_path_placeholder__/__spack_path_placeholder__/__spack_path_plac/nco-5.1.9-gcc-12.1.generic-3z7d/bin/'
+nco_path['cal1']='/home/alberta/micromamba/envs/plots/bin'
 
 cdf_path={}
 cdf_path['adastra']='/lus/work/CT1/hmg2840/aalbert/git/CDFTOOLS/bin/'
+cdf_path['cal1']='/opt/modules/cdftools/bin'
 
 sosie_path={}
 sosie_path['adastra']='/lus/work/CT1/hmg2840/aalbert/DEV/sosie'
@@ -20,6 +24,7 @@ scratch_path={}
 #scratch_path['adastra']='/lus/store/CT1/hmg2840/aalbert'
 scratch_path['adastra']='/lus/work/CT1/hmg2840/aalbert'
 #scratch_path['adastra']='/lus/scratch/CT1/hmg2840/aalbert/TMPEXTRACT'
+scratch_path['cal1']='/mnt/summer/DATA_MEOM/MODEL_SET/'
 
 # Name of extractions in short
 

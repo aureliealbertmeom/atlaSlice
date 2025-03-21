@@ -2,17 +2,19 @@ from functions import functions as f
 
 # Machines list
 
-machine_list=['adastra','jean-zay','irene']
+machine_list=['adastra','jean-zay','irene','cal1']
 
 # Directories on each machine
 
 store_path={}
 store_path['adastra']='/lus/store/CT1/hmg2840/aalbert/'
+store_path['cal1']='/mnt/summer/DATA_MEOM/MODEL_SET/'
 
 # All the configurations available on each machine
 
 configuration_list={}
 configuration_list['adastra']=['CALEDO60','eORCA36.L121','eNATL60','DFS5.2','NATL60']
+configuration_list['cal1']=['eNATL60']
 
 # All the simulations run with each configuration on each machine
 simulation_list={}
@@ -23,6 +25,8 @@ simulation_list['adastra']['eORCA36.L121']=['EXP15-10','EXP13-10','EXP22a-10','E
                                             'EXP22h-10','EXP09','grid']
 simulation_list['adastra']['NATL60']=['CJM165']
 simulation_list['adastra']['DFS5.2']=['DFS5.2']
+simulation_list['cal1']={}
+simulation_list['cal1']['eNATL60']=['BLBT02','BLB002']
 
 # Where to find the -S directory for a given simulation of a configuration on a machine and how it is organized
 
@@ -43,6 +47,10 @@ directory['adastra']['DFS5.2']={}
 directory['adastra']['DFS5.2']['DFS5.2']='/lus/work/CT1/hmg2840/aalbert/DFS5.2_RD/ALL'
 directory['adastra']['NATL60']={}
 directory['adastra']['NATL60']['CJM165']='/lus/store/CT1/hmg2840/molines/NATL60/NATL60-CJM165-S'
+directory['cal1']={}
+directory['cal1']['eNATL60']={}
+for sim in ['BLBT02','BLB002']:
+    directory['cal1']['eNATL60'][sim]='/mnt/summer/DATA_MEOM/MODEL_SET/eNATL60'
 
 
 stylenom={}
@@ -80,6 +88,11 @@ maskfile['adastra']['NATL60']['GULF']='/lus/scratch/CT1/hmg2840/aalbert/NATL60/N
 maskfile['adastra']['eNATL60']['aGS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mask_eNATL60aGS_3.6.nc'
 maskfile['adastra']['eNATL60']['aLS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mask_eNATL60aLS_3.6.nc'
 maskfile['adastra']['eNATL60']['aMNA']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mask_eNATL60aMNA_3.6.nc'
+maskfile['cal1']={}
+maskfile['cal1']['eNATL60']={}
+maskfile['cal1']['eNATL60']['aGS']='/mnt/summer/DATA_MEOM/MODEL_SET/eNATL60/eNATL60-I/mask_eNATL60aGS_3.6.nc'
+maskfile['cal1']['eNATL60']['aLS']='/mnt/summer/DATA_MEOM/MODEL_SET/eNATL60/eNATL60/eNATL60-I/mask_eNATL60aLS_3.6.nc'
+maskfile['cal1']['eNATL60']['aMNA']='/mnt/summer/DATA_MEOM/MODEL_SET/eNATL60/eNATL60/eNATL60-I/mask_eNATL60aMNA_3.6.nc'
 
 bathyfile={}
 bathyfile['adastra']={}
@@ -105,6 +118,11 @@ mesh_hgr['adastra']['eNATL60']['UKFR']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60
 mesh_hgr['adastra']['eNATL60']['aGS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60aGS_3.6.nc'
 mesh_hgr['adastra']['eNATL60']['aLS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60aLS_3.6.nc'
 mesh_hgr['adastra']['eNATL60']['aMNA']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60aMNA_3.6.nc'
+mesh_hgr['cal1']={}
+mesh_hgr['cal1']['eNATL60']={}
+mesh_hgr['cal1']['eNATL60']['aGS']='/mnt/summer/DATA_MEOM/MODEL_SET/eNATL60/eNATL60-I/mesh_hgr_eNATL60aGS_3.6.nc'
+mesh_hgr['cal1']['eNATL60']['aLS']='/mnt/summer/DATA_MEOM/MODEL_SET/eNATL60/eNATL60/eNATL60-I/mesh_hgr_eNATL60aLS_3.6.nc'
+mesh_hgr['cal1']['eNATL60']['aMNA']='/mnt/summer/DATA_MEOM/MODEL_SET/eNATL60/eNATL60/eNATL60-I/mesh_hgr_eNATL60aMNA_3.6.nc'
 
 mesh_zgr={}
 mesh_zgr['adastra']={}
@@ -118,6 +136,11 @@ mesh_zgr['adastra']['eNATL60']['UKFR']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60
 mesh_zgr['adastra']['eNATL60']['aGS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60aGS_3.6.nc'
 mesh_zgr['adastra']['eNATL60']['aLS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60aLS_3.6.nc'
 mesh_zgr['adastra']['eNATL60']['aMNA']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60aMNA_3.6.nc'
+mesh_zgr['cal1']={}
+mesh_zgr['cal1']['eNATL60']={}
+mesh_zgr['cal1']['eNATL60']['aGS']='/mnt/summer/DATA_MEOM/MODEL_SET/eNATL60/eNATL60-I/mesh_zgr_eNATL60aGS_3.6.nc'
+mesh_zgr['cal1']['eNATL60']['aLS']='/mnt/summer/DATA_MEOM/MODEL_SET/eNATL60/eNATL60/eNATL60-I/mesh_zgr_eNATL60aLS_3.6.nc'
+mesh_zgr['cal1']['eNATL60']['aMNA']='/mnt/summer/DATA_MEOM/MODEL_SET/eNATL60/eNATL60/eNATL60-I/mesh_zgr_eNATL60aMNA_3.6.nc'
 
 # All the regions we can extract or plot in 2D maps for each configuration
 
