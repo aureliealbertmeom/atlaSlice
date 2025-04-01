@@ -6,7 +6,7 @@ import numpy.ma as ma
 
 import xarray as xr
 
-sys.path.insert(0,'/lus/work/NAT/gda2307/aalbert/DEV/git/xscale')
+sys.path.insert(0,'/summer/meom/workdir/alberta/xscale')
 import xscale
 
 def vorticity(u,v,e1v,e2u):
