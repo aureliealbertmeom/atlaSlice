@@ -22,6 +22,14 @@ from functions import calc as ca
 from params import simulations_dict as params
 from params import slice_dict as sliced
 
+machine = 'dahu'
+config = 'eNATL60'
+simu = 'BLBT02'
+var = 'buoyancy'
+reg = 'aGS'
+freq = '1h'
+date = '20090801'
+
 def read_csv(machine,reg,config):
     boxes=pd.read_csv(sliced.params_path[machine]+'/boxes/boxes_'+str(reg)+'_1x1_'+str(config)+'.csv',sep = '\t',index_col=0)
     ibox=params.xy[config][reg][0]
@@ -180,28 +188,8 @@ def write_prof_filt_flux_gradients_onebox(machine,var,config,simu,reg,freq,date,
         print('writing profile '+profile_name)
         big_dataset.to_netcdf(path=profile_name,mode='w')
 
-def parse_args():
-    parser=argparse.ArgumentParser(description="all the plots")
-    parser.add_argument('-mach',type=str,help='machine on which the plot is launched')
-    parser.add_argument('-config',type=str,help='name of configuration')
-    parser.add_argument('-simu',type=str,help='name of simulation')
-    parser.add_argument('-var',type=str,help='name of variable')
-    parser.add_argument('-reg',type=str,default='global',help='name of region')
-    parser.add_argument('-freq',type=str,help='frequency of variable')
-    parser.add_argument('-date',type=str,help='date of file')
-    args=parser.parse_args()
-    return args
 
-def main():
-    machine = parse_args().mach
-    config = parse_args().config
-    sim = parse_args().simu
-    var = parse_args().var
-    reg = parse_args().reg
-    freq = parse_args().freq
-    date = parse_args().date
-
-    print ('Averaging profiles of fluxes of '+str(var)+' and filtering it for simulation '+str(config)+'-'+str(sim)+' in 1°x1° boxes located in region'+str(reg))
+print ('Averaging profiles of filtered fluxes of '+str(var)+' for simulation '+str(config)+'-'+str(simu)+' in 1°x1° boxes located in region '+str(reg))
 
 imin,imax,jmin,jmax,box_name=read_csv(machine,reg,config)
 for k in np.arange(sliced.nb_boxes[config][reg]+1):
@@ -209,5 +197,3 @@ for k in np.arange(sliced.nb_boxes[config][reg]+1):
 
 
 
-if __name__ == "__main__":
-    main()

@@ -22,6 +22,14 @@ from functions import calc as ca
 from params import simulations_dict as params
 from params import slice_dict as sliced
 
+machine = 'cal1'
+config = 'eNATL60'
+simu = 'BLBT02'
+var = 'buoyancy'
+reg = 'aGS'
+freq = '1h'
+date = '20090701'
+
 def read_csv(machine,reg,config):
     boxes=pd.read_csv(sliced.params_path[machine]+'/boxes/boxes_'+str(reg)+'_1x1_'+str(config)+'.csv',sep = '\t',index_col=0)
     ibox=params.xy[config][reg][0]
@@ -82,16 +90,16 @@ def compute_prof_filt_flux_gradients_onebox(data_box,machine,dirf,config,simu,va
     
     #Get grid sizes
     fileh=params.mesh_hgr[machine][config][reg]
-    e1=da.get_data2D_box(fileh,params.e1name[var],imin,imax,jmin,jmax,k)
-    e2=da.get_data2D_box(fileh,params.e2name[var],imin,imax,jmin,jmax,k)
+    e1=da.get_data2D_box(fileh,params.e1name[vel],imin,imax,jmin,jmax,k)
+    e2=da.get_data2D_box(fileh,params.e2name[vel],imin,imax,jmin,jmax,k)
     filez=params.mesh_zgr[machine][config][reg]
-    e3=da.get_data3D_box(filez,params.e3name[var],imin,imax,jmin,jmax,k)
+    e3=da.get_data3D_box(filez,params.e3name[vel],imin,imax,jmin,jmax,k)
     e3t=e3.rename({'z':'deptht'})
 
     #Gradients
-    data_dx=ca.dx_var(filt_data,e1[0])
-    data_dy=ca.dy_var(filt_data,e2[0])
-    data_dz=ca.dz_var(filt_data,e3t[0],params.depname[var])
+    data_dx=ca.dx_var(filt_data,e1)
+    data_dy=ca.dy_var(filt_data,e2)
+    data_dz=ca.dz_var(filt_data,e3t,params.depname[var])
 
     #Mean
     profile_data_dx=mean_10_10_xyt(data_dx.squeeze())
@@ -180,34 +188,11 @@ def write_prof_filt_flux_gradients_onebox(machine,var,config,simu,reg,freq,date,
         print('writing profile '+profile_name)
         big_dataset.to_netcdf(path=profile_name,mode='w')
 
-def parse_args():
-    parser=argparse.ArgumentParser(description="all the plots")
-    parser.add_argument('-mach',type=str,help='machine on which the plot is launched')
-    parser.add_argument('-config',type=str,help='name of configuration')
-    parser.add_argument('-simu',type=str,help='name of simulation')
-    parser.add_argument('-var',type=str,help='name of variable')
-    parser.add_argument('-reg',type=str,default='global',help='name of region')
-    parser.add_argument('-freq',type=str,help='frequency of variable')
-    parser.add_argument('-date',type=str,help='date of file')
-    args=parser.parse_args()
-    return args
 
-def main():
-    machine = parse_args().mach
-    config = parse_args().config
-    sim = parse_args().simu
-    var = parse_args().var
-    reg = parse_args().reg
-    freq = parse_args().freq
-    date = parse_args().date
-
-    print ('Averaging profiles of fluxes of '+str(var)+' and filtering it for simulation '+str(config)+'-'+str(sim)+' in 1°x1° boxes located in region'+str(reg))
+print ('Averaging profiles of filtered fluxes of '+str(var)+' for simulation '+str(config)+'-'+str(simu)+' in 1°x1° boxes located in region '+str(reg))
 
 imin,imax,jmin,jmax,box_name=read_csv(machine,reg,config)
-for k in np.arange(sliced.nb_boxes[config][reg]+1):
-	write_prof_filt_flux_gradients_onebox(machine,var,config,simu,reg,freq,date,imin,imax,jmin,jmax,box_name,k)
+write_prof_filt_flux_gradients_onebox(machine,var,config,simu,reg,freq,date,imin,imax,jmin,jmax,box_name,0)
 
 
 
-if __name__ == "__main__":
-    main()
