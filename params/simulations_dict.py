@@ -74,12 +74,8 @@ maskfile['adastra']['NATL60']={}
 maskfile['adastra']['NATL60']['NATL60']='/lus/store/CT1/hmg2840/molines/NATL60/NATL60-I/NATL60_v4.1_cdf_byte_mask.nc'
 maskfile['adastra']['eNATL60']={}
 maskfile['adastra']['eNATL60']['eNATL60']='/lus/store/CT1/hmg2840/brodeau/eNATL60/eNATL60-I/mask_eNATL60_3.6.nc'
-maskfile['adastra']['eNATL60']['CARA']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mask_eNATL60CARA_3.6.nc'
-maskfile['adastra']['eNATL60']['UKFR']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mask_eNATL60UKFR_3.6.nc'
-maskfile['adastra']['NATL60']['GULF']='/lus/scratch/CT1/hmg2840/aalbert/NATL60/NATL60-I/NATL60GULF_v4.1_cdf_byte_mask.nc'
-maskfile['adastra']['eNATL60']['aGS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mask_eNATL60aGS_3.6.nc'
-maskfile['adastra']['eNATL60']['aLS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mask_eNATL60aLS_3.6.nc'
-maskfile['adastra']['eNATL60']['aMNA']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mask_eNATL60aMNA_3.6.nc'
+for reg in ['CARA','UKFR','GULF','aGS','aLS','aMNA','PORT']:
+    maskfile['adastra']['eNATL60'][reg]='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mask_eNATL60'+str(reg)+'_3.6.nc'
 
 bathyfile={}
 bathyfile['adastra']={}
@@ -100,11 +96,8 @@ mesh_hgr['adastra']['NATL60']['NATL60']='/lus/store/CT1/hmg2840/molines/NATL60/N
 mesh_hgr['adastra']['NATL60']['GULF']='/lus/scratch/CT1/hmg2840/aalbert/NATL60/NATL60-I/NATL60GULF_v4.1_cdf_mesh_hgr.nc'
 mesh_hgr['adastra']['eNATL60']={}
 mesh_hgr['adastra']['eNATL60']['eNATL60']='/lus/store/CT1/hmg2840/brodeau/eNATL60/eNATL60-I/mesh_hgr_eNATL60_3.6.nc'
-mesh_hgr['adastra']['eNATL60']['CARA']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60CARA_3.6.nc'
-mesh_hgr['adastra']['eNATL60']['UKFR']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60UKFR_3.6.nc'
-mesh_hgr['adastra']['eNATL60']['aGS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60aGS_3.6.nc'
-mesh_hgr['adastra']['eNATL60']['aLS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60aLS_3.6.nc'
-mesh_hgr['adastra']['eNATL60']['aMNA']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60aMNA_3.6.nc'
+for reg in ['CARA','UKFR','GULF','aGS','aLS','aMNA','PORT']:
+    mesh_hgr['adastra']['eNATL60'][reg]='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_hgr_eNATL60'+str(reg)+'_3.6.nc'
 
 mesh_zgr={}
 mesh_zgr['adastra']={}
@@ -113,17 +106,14 @@ mesh_zgr['adastra']['NATL60']['NATL60']='/lus/store/CT1/hmg2840/molines/NATL60/N
 mesh_zgr['adastra']['NATL60']['GULF']='/lus/scratch/CT1/hmg2840/aalbert/NATL60/NATL60-I/NATL60GULF_v4.1_cdf_mesh_zgr.nc'
 mesh_zgr['adastra']['eNATL60']={}
 mesh_zgr['adastra']['eNATL60']['eNATL60']='/lus/store/CT1/hmg2840/brodeau/eNATL60/eNATL60-I/mesh_zgr_eNATL60_3.6.nc'
-mesh_zgr['adastra']['eNATL60']['CARA']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60CARA_3.6.nc'
-mesh_zgr['adastra']['eNATL60']['UKFR']='/lus/scratch/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60UKFR_3.6.nc'
-mesh_zgr['adastra']['eNATL60']['aGS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60aGS_3.6.nc'
-mesh_zgr['adastra']['eNATL60']['aLS']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60aLS_3.6.nc'
-mesh_zgr['adastra']['eNATL60']['aMNA']='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60aMNA_3.6.nc'
+for reg in ['CARA','UKFR','GULF','aGS','aLS','aMNA','PORT']:
+    mesh_zgr['adastra']['eNATL60'][reg]='/lus/work/CT1/hmg2840/aalbert/eNATL60/eNATL60-I/mesh_zgr_eNATL60'+str(reg)+'_3.6.nc'
 
 # All the regions we can extract or plot in 2D maps for each configuration
 
 regions_list={}
 regions_list['CALEDO60']=['CALEDO60']
-regions_list['eNATL60']=['eNATL60','SICIL','SICILe','SICILext','CARA','UKFR','aGS','aLS','aMNA','aMNA1','aMNA2','aMNA3','aMNA4']
+regions_list['eNATL60']=['eNATL60','SICIL','SICILe','SICILext','CARA','UKFR','aGS','aLS','aMNA','aMNA1','aMNA2','aMNA3','aMNA4','PORT']
 regions_list['NATL60']=['NATL60','GULF']
 regions_list['DFS5.2']=['NATL60','eNATL60']
 
@@ -160,6 +150,7 @@ xy['eNATL60']['aGS']=[1602,2286,1736,2359]
 xy['eNATL60']['aLS']=[2686,3075,3589,4274]
 #xy['eNATL60']['aMNA']='-d x,3462,4682 -d y,2337,3568'
 xy['eNATL60']['aMNA']=[3462,4682,2337,3568]
+xy['eNATL60']['PORT']=[4672,5282,1861,2648]
 xy['eNATL60']['aMNA1']='-d x,3462,4084 -d y,2337,2965'
 xy['eNATL60']['aMNA2']='-d x,4060,4682 -d y,2941,3568'
 xy['eNATL60']['aMNA3']='-d x,3462,4084 -d y,2941,3568'
@@ -173,7 +164,7 @@ xy['NATL60']['GULF']=[929,1667,379,1306]
 
 variable_list=['SSH','SSU','SSV','SSS','SST','T','S','U','V','W','TAUM','TAUBOT','QTOCE','QSROCE','QSBOCE','QNSOCE','QLWOCE','QLAOCE','PRECIP','EVAPOCE',
                'EMPMR','WINDSP','RHOAIR','MLD','SBU','TAUUO','SBV','TAUVO','SICONC','SITHIC','MOD','VORT','NETDHEATFLX','SWDHEATFLX','QNS','LDHEATFLX',
-               'LWDHEATFLX','SDHEATFLX','NETUPWFLX','DSALTFLX','DAMPWFLX','bathy','MOC','u10','v10','u10m','v10m','BOTU','BOTV','buoyancy']
+               'LWDHEATFLX','SDHEATFLX','NETUPWFLX','DSALTFLX','DAMPWFLX','bathy','MOC','u10','v10','u10m','v10m','BOTU','BOTV','buoyancy','mask']
 
 
 vars_dim={}
@@ -300,16 +291,19 @@ for var in ['MOD','VORT']:
 
 frequencies={}
 frequencies['eNATL60']={}
-frequencies['eNATL60']['BLBT02']={'MOC':'1h','SSH':'1h','SSS':'1h','SST':'1h','SSU':'1h','SSV':'1h','T':'1h','S':'1h','U':'1h','V':'1h','W':'1h'}
+for simu in ['BLB002','BLBT02','BLB002X','BLBT02X']:
+    frequencies['eNATL60'][simu]={'MOC':'1h','SSH':'1h','SSS':'1h','SST':'1h','SSU':'1h','SSV':'1h','T':'1h','S':'1h','U':'1h','V':'1h','W':'1h'}
 frequencies['CALEDO60']={}
 frequencies['CALEDO60']['TRPC12NT0']={'SSH':'1h','SSU':'1h','SSV':'1h'}
 frequencies['CALEDO60']['TRPC12N00']={'SSH':'1h','SSU':'1h','SSV':'1h'}
+frequencies['eORCA36.L121']={}
 for simu in ['EXP15-10','EXP13-10','EXP22a-10','EXP22b-10','EXP22c-10','EXP22d-10','EXP22e-10','EXP22f-10','EXP22g-10','EXP22h-10','EXP09']:
-    frequencies['eNATL60'][simu]={'SSH':'1h','SSU':'1h','SSV':'1h','SSS':'1h','SST':'1h','MLD':'1h','SICONC':'1h','SITHIC':'1h','MOD':'1h','VORT':'1h','U':'12h','V':'12h','S':'12h','T':'12h','W':'12h','NETDHEATFLX':'1h','NETUPWFLX':'1h','PRECIP':'1h','WINDSP':'1h','SWDHEATFLX':'1h','LWDHEATFLX':'1h'}
+    frequencies['eORCA36.L121'][simu]={'SSH':'1h','SSU':'1h','SSV':'1h','SSS':'1h','SST':'1h','MLD':'1h','SICONC':'1h','SITHIC':'1h','MOD':'1h','VORT':'1h','U':'12h','V':'12h','S':'12h','T':'12h','W':'12h','NETDHEATFLX':'1h','NETUPWFLX':'1h','PRECIP':'1h','WINDSP':'1h','SWDHEATFLX':'1h','LWDHEATFLX':'1h'}
 
 frequencies_file={}
 frequencies_file['eNATL60']={}
-frequencies_file['eNATL60']['BLBT02']={'MOC':'1d','SSH':'1d','SSS':'1d','SST':'1d','SSU':'1d','SSV':'1d','T':'1d','S':'1d','U':'1d','V':'1d','W':'1d'}
+for simu in ['BLB002','BLBT02','BLB002X','BLBT02X']:
+    frequencies_file['eNATL60'][simu]={'MOC':'1d','SSH':'1d','SSS':'1d','SST':'1d','SSU':'1d','SSV':'1d','T':'1d','S':'1d','U':'1d','V':'1d','W':'1d'}
 frequencies_file['eORCA36.L121']={}
 for simu in ['EXP15-10','EXP13-10','EXP22a-10','EXP22b-10','EXP22c-10','EXP22d-10','EXP22e-10','EXP22f-10','EXP22g-10','EXP22h-10','EXP09']:
     frequencies_file['eORCA36.L121'][simu]={'NETDHEATFLX':'12h','NETUPWFLX':'12h','PRECIP':'12h','WINDSP':'12h','SWDHEATFLX':'12h','LWDHEATFLX':'12h',

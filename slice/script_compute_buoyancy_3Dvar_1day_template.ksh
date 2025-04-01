@@ -43,7 +43,8 @@ for file in $(ls ${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}d${DD}.${FREQ}_${VAR}.nc
 	fileo=${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}d${DD}.${FREQ}_buoyancy.nc
 	if [ ! -f  $fileo ]; then
 		echo $fileo
-		CDFPATH/cdfsig0 -t ${file} -s ${files} -tem ${VARNAME} -sal ${VARSAL} -teos10 -nc4 -o ${fileo}
+		CDFPATH/cdfsig0 -t ${file} -s ${files} -tem ${VARNAME} -sal ${VARSAL} -teos10 -nc4 -o tmp_${fileo}
+		mv tmp_${fileo} ${fileo}
 	fi
 done
 
