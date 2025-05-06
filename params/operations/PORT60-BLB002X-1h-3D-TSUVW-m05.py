@@ -29,8 +29,8 @@ regions=['PORT']
 # Name of the variables considered for extraction
 # It must be in the list of acceptable variables
 #variables=['T','S','U','V']
-#variables=['T','S','U','V','W']
-variables=['SSH']
+variables=['T','S','U','V','W']
+#variables=['SSH']
 #variables=['mask']
 
 # Frequency of the output
@@ -50,6 +50,6 @@ job='Y'
 # Must be in the format yyyy-mm-dd
 #date_init='2009-07-01'
 date_init='2010-05-16'
-date_end='2010-05-30'
+date_end='2010-05-31'
 
 

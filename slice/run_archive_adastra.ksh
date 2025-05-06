@@ -7,7 +7,7 @@ conda activate plots
 
 cd /lus/home/CT1/hmg2840/aalbert/git/atlaSlice/slice
 
-for param in aGS-LS60-BLBT02-1h-3D-W-m08.py; do
+for param in eORCA36-L121-EXP15-S-archive.py; do
 	ln -sf ../params/operations/$param .
-	python launch_archive.py -param "${param%.*}"
+	python launch_archive_output.py -param "${param%.*}"
 done

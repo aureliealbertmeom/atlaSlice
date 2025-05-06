@@ -29,12 +29,13 @@ regions=['PORT']
 # Name of the variables considered for extraction
 # It must be in the list of acceptable variables
 #variables=['T','S','U','V']
-variables=['T','S','U','V','W']
-#variables=['W']
+variables=['T','S','U','V','W','curloverf']
+#variables=['SSH']
+#variables=['curloverf']
 
 # Frequency of the output
 # It must be compatible for the simulation and variable
-frequency='1h'
+frequency='1d'
 
 # Extra operation after extraction of raw outputs
 operation='degrad4' # extract then degrad3
@@ -49,6 +50,6 @@ job='Y'
 # Must be in the format yyyy-mm-dd
 #date_init='2009-07-01'
 date_init='2010-05-01'
-date_end='2010-05-30'
+date_end='2010-06-01'
 
 

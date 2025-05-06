@@ -24,7 +24,7 @@ simulations=['BLBT02']
 # Name of the regions considered for extraction
 # It must have been defined for the selected configuration
 regions=['aMNA']
-#regions=['aGS','aLS','aMNA']
+#regions=['aGS','aLS']
 
 # Name of the variables considered for extraction
 # It must be in the list of acceptable variables
@@ -47,7 +47,7 @@ job='Y'
 # Period of the extraction
 # Must be in the format yyyy-mm-dd
 #date_init='2009-07-01'
-date_init='2009-08-01'
+date_init='2009-10-01'
 date_end='2009-10-31'
 
 

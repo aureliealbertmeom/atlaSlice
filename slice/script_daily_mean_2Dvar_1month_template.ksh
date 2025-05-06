@@ -10,7 +10,7 @@ YYYY=YEAR
 MM=MONTH
 STYLE=STYLENOM
 
-TDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}/${REG}/1d
+TDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}-S/1d/${REG}
 mkdir -p $TDIR
 cd $TDIR
 
@@ -23,7 +23,7 @@ DFS=dfs
 
 ulimit -s unlimited
 
-SDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}/${REG}/${FREQ}
+SDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}-S/${FREQ}/${REG}
 
 if [ "$STYLE" -eq "$DFS" ]; then
 	for file in $(ls ${SDIR}/${CONFIG}${SREG}_y${YYYY}m${MM}d??.${FREQ}_${VAR}.nc); do

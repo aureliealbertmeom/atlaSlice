@@ -85,7 +85,7 @@ for simu in ['EXP15-10','EXP13-10','EXP22a-10','EXP22b-10','EXP22c-10','EXP22d-1
 maskfile={}
 maskfile['adastra']={}
 maskfile['adastra']['eORCA36.L121']={}
-maskfile['adastra']['eORCA36.L121']['eORCA36.L121']='/lus/work/NAT/gda2307/aalbert/eORCA36.L121/eORCA36.L121-I/eORCA36.L121_mesh_mask_noisf_v2_4.2.nc'
+maskfile['adastra']['eORCA36.L121']['eORCA36.L121']='/lus/store/CT1/hmg2840/aalbert/eORCA36.L121/eORCA36.L121-I/eORCA36.L121_mesh_mask_noisf_v2_4.2.nc'
 maskfile['adastra']['NATL60']={}
 maskfile['adastra']['NATL60']['NATL60']='/lus/store/CT1/hmg2840/molines/NATL60/NATL60-I/NATL60_v4.1_cdf_byte_mask.nc'
 maskfile['adastra']['eNATL60']={}
@@ -157,7 +157,7 @@ regions_list['eNATL60']=['eNATL60','SICIL','SICILe','SICILext','CARA','UKFR','aG
 regions_list['NATL60']=['NATL60','GULF']
 regions_list['DFS5.2']=['NATL60','eNATL60']
 
-regions_list['eORCA36.L121']=['global','natl','satl','arctic','antarctic','indian','windian','eindian','npac','spac','med','npole','spole','eqpac',
+regions_list['eORCA36.L121']=['eORCA','global','natl','satl','arctic','antarctic','indian','windian','eindian','npac','spac','med','npole','spole','eqpac',
                               'madagascar','bassas','glorieuses','juan','tromelin','mascaraignes']
 
 # Indices for region extraction or plots without projection corresponding to the configuration
@@ -204,7 +204,7 @@ xy['NATL60']['GULF']=[929,1667,379,1306]
 
 variable_list=['SSH','SSU','SSV','SSS','SST','T','S','U','V','W','TAUM','TAUBOT','QTOCE','QSROCE','QSBOCE','QNSOCE','QLWOCE','QLAOCE','PRECIP','EVAPOCE',
                'EMPMR','WINDSP','RHOAIR','MLD','SBU','TAUUO','SBV','TAUVO','SICONC','SITHIC','MOD','VORT','NETDHEATFLX','SWDHEATFLX','QNS','LDHEATFLX',
-               'LWDHEATFLX','SDHEATFLX','NETUPWFLX','DSALTFLX','DAMPWFLX','bathy','MOC','u10','v10','u10m','v10m','BOTU','BOTV','buoyancy','mask']
+               'LWDHEATFLX','SDHEATFLX','NETUPWFLX','DSALTFLX','DAMPWFLX','bathy','MOC','u10','v10','u10m','v10m','BOTU','BOTV','buoyancy','mask','curloverf']
 
 
 vars_dim={}
@@ -212,7 +212,7 @@ for var in ['SSH','SSU','SSV','SSS','SST','TAUM','TAUBOT','QTOCE','QSROCE','QSBO
             'RHOAIR','MLD','SBU','TAUUO','SBV','TAUVO','SICONC','SITHIC','NETDHEATFLX','SWDHEATFLX','QNS','LDHEATFLX','LWDHEATFLX','SDHEATFLX',
             'NETUPWFLX','DSALTFLX','DAMPWFLX','MOD','VORT','bathy','MOC','u10','v10','u10m','v10m','BOTU','BOTV']:
     vars_dim[var]='2D'
-for var in ['T','S','U','V','W','buoyancy']:
+for var in ['T','S','U','V','W','buoyancy','curloverf']:
     vars_dim[var]='3D'
 
 
@@ -221,7 +221,7 @@ vars_name['eNATL60']={}
 for sim in ['BLBT02','BLB002','BLBT01','BLB001','BLBT02X','BLB002X']:
     vars_name['eNATL60'][sim]={'SSH':'sossheig','SSU':'sozocrtx','SSV':'somecrty','SST':'sosstsst','SSS':'sosaline','MLD':'somxl010',
                                'BOTU':'bozocrtx','BOTV':'bomecrty','T':'votemper','S':'vosaline','U':'vozocrtx','V':'vomecrty','W':'vovecrtz',
-                               'MOC':'zomsfglo','bathy':'Bathymetry','buoyancy':'vosigma0'}
+                               'MOC':'zomsfglo','bathy':'Bathymetry','buoyancy':'vosigma0','curloverf':'socurloverf'}
 vars_name['CALEDO60']={}
 for simu in ['TRPC12NT0','TRPC12N00']:
 	vars_name['CALEDO60'][simu]={'SSH':'zos','SSU':'uos','SSV':'vos'}
@@ -242,7 +242,7 @@ filetyp={}
 filetyp['eNATL60']={}
 for sim in ['BLBT02','BLB002','BLBT02X','BLB002X']:
     filetyp['eNATL60'][sim]={'SSH':'gridT-2D','SSS':'gridT-2D','SST':'gridT-2D','MLD':'gridT-2D','SSU':'gridU-2D','SSV':'gridV-2D','T':'gridT',
-                             'S':'gridS','U':'gridU','V':'gridV','W':'gridW','MOC':'MOC'}
+            'S':'gridS','U':'gridU','V':'gridV','W':'gridW','MOC':'MOC','curloverf':'curloverf'}
 filetyp['eNATL60']['grid']={'bathy':'BATHY_GEBCO_2014_2D_msk_v3_merg'}
 for sim in ['BLBT01','BLB001']:
     filetyp['eNATL60'][sim]={'SSH':'gridT','SSS':'gridT','SST':'gridT','SSU':'gridU','SSV':'gridV'}
@@ -273,7 +273,7 @@ mask2Dname['v10']='vmaskutil'
 depname={}
 for var in ['T','S','MOD','VORT','buoyancy']:
     depname[var]='deptht'
-for var in ['U'] :
+for var in ['U','curloverf'] :
     depname[var]='depthu'
 for var in ['V'] :
     depname[var]='depthv'
@@ -283,7 +283,7 @@ for var in ['W','MOC'] :
 e1name={}
 for var in ['T','S','MOD','VORT','buoyancy']:
     e1name[var]='e1t'
-for var in ['U'] :
+for var in ['U','curloverf'] :
     e1name[var]='e1u'
 for var in ['V'] :
     e1name[var]='e1v'
@@ -293,7 +293,7 @@ for var in ['W','MOC'] :
 e2name={}
 for var in ['T','S','MOD','VORT','buoyancy']:
     e2name[var]='e2t'
-for var in ['U'] :
+for var in ['U','curloverf'] :
     e2name[var]='e2u'
 for var in ['V'] :
     e2name[var]='e2v'
@@ -303,7 +303,7 @@ for var in ['W','MOC'] :
 e3name={}
 for var in ['T','S','MOD','VORT','buoyancy']:
     e3name[var]='e3t_0'
-for var in ['U'] :
+for var in ['U','curloverf'] :
     e3name[var]='e3u_0'
 for var in ['V'] :
     e3name[var]='e3v_0'
@@ -312,7 +312,7 @@ for var in ['W','MOC'] :
 
 varpt={'T':'T','S':'T','SSH':'T','SST':'T','SSS':'T','SSU':'U','SSV':'V','U':'U','V':'V','W':'W','TAUM':'T','TAUBOT':'T','QTOCE':'T','QSROCE':'T',
        'QSBOCE':'T','QNSOCE':'T','QLWOCE':'T','QLAOCE':'T','PRECIP':'T','EVAPOCE':'T','EMPMR':'T','WINDSP':'T','RHOAIR':'T','MLD':'T','BOTU':'U',
-       'TAUUO':'U','BOTV':'V','TAUVO':'V','u10':'U','v10':'V','u10m':'U','v10m':'V'}
+       'TAUUO':'U','BOTV':'V','TAUVO':'V','u10':'U','v10':'V','u10m':'U','v10m':'V','curloverf':'U'}
 
 
 compute={}
@@ -332,7 +332,7 @@ for var in ['MOD','VORT']:
 frequencies={}
 frequencies['eNATL60']={}
 for simu in ['BLB002','BLBT02','BLB002X','BLBT02X']:
-    frequencies['eNATL60'][simu]={'MOC':'1h','SSH':'1h','SSS':'1h','SST':'1h','SSU':'1h','SSV':'1h','T':'1h','S':'1h','U':'1h','V':'1h','W':'1h'}
+    frequencies['eNATL60'][simu]={'MOC':'1h','SSH':'1h','SSS':'1h','SST':'1h','SSU':'1h','SSV':'1h','T':'1h','S':'1h','U':'1h','V':'1h','W':'1h','curloverf':'1h'}
 frequencies['CALEDO60']={}
 frequencies['CALEDO60']['TRPC12NT0']={'SSH':'1h','SSU':'1h','SSV':'1h'}
 frequencies['CALEDO60']['TRPC12N00']={'SSH':'1h','SSU':'1h','SSV':'1h'}
@@ -343,7 +343,7 @@ for simu in ['EXP15-10','EXP13-10','EXP22a-10','EXP22b-10','EXP22c-10','EXP22d-1
 frequencies_file={}
 frequencies_file['eNATL60']={}
 for simu in ['BLB002','BLBT02','BLB002X','BLBT02X']:
-    frequencies_file['eNATL60'][simu]={'MOC':'1d','SSH':'1d','SSS':'1d','SST':'1d','SSU':'1d','SSV':'1d','T':'1d','S':'1d','U':'1d','V':'1d','W':'1d'}
+    frequencies_file['eNATL60'][simu]={'MOC':'1d','SSH':'1d','SSS':'1d','SST':'1d','SSU':'1d','SSV':'1d','T':'1d','S':'1d','U':'1d','V':'1d','W':'1d','curloverf':'1d'}
 frequencies_file['eORCA36.L121']={}
 for simu in ['EXP15-10','EXP13-10','EXP22a-10','EXP22b-10','EXP22c-10','EXP22d-10','EXP22e-10','EXP22f-10','EXP22g-10','EXP22h-10','EXP09']:
     frequencies_file['eORCA36.L121'][simu]={'NETDHEATFLX':'12h','NETUPWFLX':'12h','PRECIP':'12h','WINDSP':'12h','SWDHEATFLX':'12h','LWDHEATFLX':'12h',

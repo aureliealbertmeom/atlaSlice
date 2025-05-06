@@ -25,6 +25,7 @@ sosie_path['adastra']='/lus/work/CT1/hmg2840/aalbert/DEV/sosie'
 scratch_path={}
 #scratch_path['adastra']='/lus/store/CT1/hmg2840/aalbert'
 scratch_path['adastra']='/lus/work/CT1/hmg2840/aalbert'
+#scratch_path['adastra']='/lus/work/NAT/gda2307/aalbert'
 #scratch_path['adastra']='/lus/scratch/CT1/hmg2840/aalbert/TMPEXTRACT'
 scratch_path['cal1']='/mnt/summer/DATA_MEOM/MODEL_SET/'
 scratch_path['dahu']='/summer/meom/MODEL_SET'
@@ -44,6 +45,8 @@ ex['DFS5.2']['eNATL60']='eNATL60'
 ex['NATL60']={}
 ex['NATL60']['NATL60']=''
 ex['NATL60']['GULF']='GULF'
+ex['eORCA36.L121']={}
+ex['eORCA36.L121']['eORCA36']=''
 
 # Parameters for profiles in 1°x1° boxes
 
@@ -64,3 +67,5 @@ mprocs['degrad']=30
 mprocs['extract']=10
 mprocs['compute_buoyancy']=10
 mprocs['compute_curl']=10
+mprocs['compute_curloverf']=10
+mprocs['prof_flux_filt_inboxes']=10

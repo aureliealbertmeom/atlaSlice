@@ -38,7 +38,7 @@ variables=['U']
 frequency='1h'
 
 # Extra operation after extraction of raw outputs
-operation='compute_curl' # extract then degrad3
+operation='compute_curloverf' # extract then degrad3
 
 # Perform the archive or not
 archive='Y'
@@ -50,6 +50,6 @@ job='Y'
 # Must be in the format yyyy-mm-dd
 #date_init='2009-07-01'
 date_init='2010-05-01'
-date_end='2010-05-30'
+date_end='2010-06-01'
 
 
