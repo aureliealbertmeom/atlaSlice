@@ -5,15 +5,18 @@ script_path={}
 script_path['adastra']='/lus/home/CT1/hmg2840/aalbert/git/atlaSlice/slice'
 script_path['cal1']='/home/alberta/git/atlaSlice/slice'
 script_path['dahu']='/bettik/alberta/git/atlaSlice'
+script_path['jean-zay']='/lustre/fswork/projects/rech/cli/rote001/DEV/git/atlaSlice'
 
 params_path={}
 params_path['adastra']='/lus/home/CT1/hmg2840/aalbert/git/atlaSlice/params'
 params_path['cal1']='/home/alberta/git/atlaSlice/params'
 params_path['dahu']='/bettik/alberta/git/atlaSlice/params'
+params_path['jean-zay']='/lustre/fswork/projects/rech/cli/rote001/DEV/git/atlaSlice/params'
 
 nco_path={}
 nco_path['adastra']='/opt/software/gaia/prod/3.2.0/__spack_path_placeholder__/__spack_path_placeholder__/__spack_path_placeholder__/__spack_path_plac/nco-5.1.9-gcc-12.1.generic-3z7d/bin/'
 nco_path['cal1']='/home/alberta/micromamba/envs/plots/bin'
+nco_path['jean-zay']='/gpfslocalsup/spack_soft/nco/4.9.3/intel-19.0.4-gyk4x3jcbjigff5av2qbo2pefawaozyd/bin'
 
 cdf_path={}
 cdf_path['adastra']='/lus/work/CT1/hmg2840/aalbert/git/CDFTOOLS/bin/'
@@ -29,10 +32,13 @@ scratch_path['adastra']='/lus/work/CT1/hmg2840/aalbert'
 #scratch_path['adastra']='/lus/scratch/CT1/hmg2840/aalbert/TMPEXTRACT'
 scratch_path['cal1']='/mnt/summer/DATA_MEOM/MODEL_SET/'
 scratch_path['dahu']='/summer/meom/MODEL_SET'
+scratch_path['jean-zay']='/lustre/fsn1/projects/rech/cli/rote001'
 
 # Name of extractions in short
 
 ex={}
+ex['ENS']={}
+ex['ENS']['MED']=''
 ex['CALEDO60']={}
 ex['CALEDO60']['CALEDO60']=''
 ex['eNATL60']={}
@@ -61,7 +67,7 @@ nb_boxes['eNATL60']['aMNA']=399
 mprocs={}
 mprocs['apply_mask']=30
 mprocs['project_sosie']=30
-mprocs['daily_files']=30
+mprocs['daily_files']=48
 mprocs['daily_mean']=30
 mprocs['degrad']=30
 mprocs['extract']=10

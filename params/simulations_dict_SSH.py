@@ -65,8 +65,8 @@ for sim in ['BLBT02','BLB002']:
     directory['dahu']['eNATL60'][sim]='/summer/meom/MODEL_SET/eNATL60'
 directory['jean-zay']={}
 directory['jean-zay']['ENS']={}
-directory['jean-zay']['ENS']['04']='/lustre/fsstor/projects/rech/egi/regi700/Nemo-med/Resu/ENS04'
-#directory['jean-zay']['ENS']['04']='/lustre/fsn1/projects/rech/cli/rote001/ENS/ENS-04/MED/1d'
+#directory['jean-zay']['ENS']['04']='/lustre/fsstor/projects/rech/egi/regi700/Nemo-med/Resu/ENS04'
+directory['jean-zay']['ENS']['04']='/lustre/fsn1/projects/rech/cli/rote001/ENS/ENS-04/MED/1d'
 
 
 stylenom={}
@@ -366,8 +366,8 @@ for simu in ['EXP15-10','EXP13-10','EXP22a-10','EXP22b-10','EXP22c-10','EXP22d-1
 frequencies_file={}
 frequencies_file['ENS']={}
 frequencies_file['ENS']['04']={}
-frequencies_file['ENS']['04']['SSH']='2y'
-#frequencies_file['ENS']['04']['SSH']='1d'
+#frequencies_file['ENS']['04']['SSH']='2y'
+frequencies_file['ENS']['04']['SSH']='1d'
 frequencies_file['eNATL60']={}
 for simu in ['BLB002','BLBT02','BLB002X','BLBT02X']:
     frequencies_file['eNATL60'][simu]={'MOC':'1d','SSH':'1d','SSS':'1d','SST':'1d','SSU':'1d','SSV':'1d','T':'1d','S':'1d','U':'1d','V':'1d','W':'1d','curloverf':'1d'}

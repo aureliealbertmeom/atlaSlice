@@ -279,32 +279,38 @@ def get_ind_xtrac_day_in_month(day, freq):
 
     return ti,tf
 
-def get_ind_xtrac_day_in_5days(tag,tag1f,freq):
+def get_ind_xtrac_day_in_5days(tag,tag1f,frequency):
     """
     Get the temporal indexes bounding a given day for a 5 days file with a given freqency of output
     Parameters :
       - tag: tag of the day considered in the form 'yyyymmdd'
       - tag1f: tag of the first day of the 5 days period 
-      - frequency of the time axis
+      - freq: frequency of the time axis in the form 1h, 1d, 1m, 1y
     Returns :
-      - ti and tf the bounding indexes for the day considered
+      - ti and tf the bounding indexes for the day considered (fortran mode)
     """
     
     tday=pd.Timestamp(tag)
     tday1f=pd.Timestamp(tag1f)
     delta=tday-tday1f
-    nb_per_day=int(24/int(freq[:-1]))
+    match frequency:
+        case '1h':
+            freq=1
+        case '1d':
+            freq=24
+    nb_per_day=int(24/freq)
     ti=int(delta.days)*nb_per_day+1
     tf=(int(delta.days)+1)*nb_per_day
 
     return ti,tf
 
-def find_files_containing_1d(mylist,tag):
+def find_files_containing_1d(mylist,tag,style):
     """
     Get the name of the file that contains a specific day of data among a list of files
     Parameters :
       - mylist : list of files eligible
       - tag : describes the exact day we want to extract in the form 'yyyy-mm-dd'
+      - style : describes the syntax of the name of the files in mylist
     Returns :
       - file_extract : the nam of the file that contains the data for the date
       - tag1f, tag2f : the corresponding period that contains the date
@@ -314,16 +320,27 @@ def find_files_containing_1d(mylist,tag):
 
     found=0
     for files in mylist:
-        tag=files.split("_")[1]
-        tag1=tag.split("-")[0]
-        ttag2=tag.split("-")[1]
-        tag2=ttag2.split(".")[0]
-        day1=tag1[-2:]
-        day2=tag2[-2:]
-        mm1=tag1[-4:-2]
-        mm2=tag2[-4:-2]
-        yy1=tag1[:4]
-        yy2=tag2[:4]
+        if style=='jmb':
+            # Get the begin and end date of the file from the name
+            tag1=files.split("_")[2]
+            tag2=files.split("_")[3]
+            day1=tag1[-2:]
+            day2=tag2[-2:]
+            mm1=tag1[-4:-2]
+            mm2=tag2[-4:-2]
+            yy1=tag1[:4]
+            yy2=tag2[:4]
+        elif style=='jmm':
+            tag=files.split("_")[1]
+            tag1=tag.split("-")[0]
+            ttag2=tag.split("-")[1]
+            tag2=ttag2.split(".")[0]
+            day1=tag1[-2:]
+            day2=tag2[-2:]
+            mm1=tag1[-4:-2]
+            mm2=tag2[-4:-2]
+            yy1=tag1[:4]
+            yy2=tag2[:4]
         tfile1=pd.Timestamp(str(yy1)+'-'+str(mm1)+'-'+str(day1))
         tfile2=pd.Timestamp(str(yy2)+'-'+str(mm2)+'-'+str(day2))
         if tfile1 <= tday and tday <= tfile2 :
@@ -333,9 +350,9 @@ def find_files_containing_1d(mylist,tag):
             tag2f=tag2
 
     if found == 0:
-        sys.exit("file not found for date "+str(tday))
-
-    return file_extract,tag1f,tag2f
+        return None,None,None
+    else:
+        return file_extract,tag1f,tag2f
 
 def nb_time_steps(date_init,date_end,frequency):
     """

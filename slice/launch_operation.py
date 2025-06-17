@@ -6,6 +6,8 @@ import pandas as pd
 import shutil
 import subprocess
 import datetime
+from calendar import monthrange
+import numpy as np
 
 #Make sure the path to the package is in the PYTHONPATH
 from functions import functions as f
@@ -64,7 +66,7 @@ def doc(machine,configuration,simulations,regions,variables,frequency,date_init,
             f.write(line)
             f.write('\n')
 
-def set_up_script_1simulationu_1region_1var_nomask(machine,configuration,simulation,region,var,frequency,tag,year,mm,operation):
+def set_up_script_1simulation_1region_1var_nomask(machine,configuration,simulation,region,var,frequency,tag,year,mm,operation):
     scriptname=('tmp_script_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_'+str(var)+'_'+str(frequency)+'_'+str(tag)+'.ksh')
     if len(tag)==10:
         dd=tag[-2:]
@@ -84,9 +86,9 @@ def set_up_script_1simulationu_1region_1var_nomask(machine,configuration,simulat
         if str(params.frequencies_file[configuration][simulation][var])=='1m':
             indti,indtf=f.get_ind_xtrac_day_in_month(dd, str(frequency))
             f.use_template('script_'+str(operation)+'_2Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[configuration][simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'SCPATH':str(sliced.scratch_path[machine]),'INDTI':indti,'INDTF':indtf,'NCOPATH':str(params.nco_path[machine])})
-        if str(params.file_frequencies[configuration][simulation][var])=='5d':
+        if str(params.frequencies_file[configuration][simulation][var])=='5d':
             mylist = [files for files in glob.glob(str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'/'+str(frequency)+'/'+str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_????????-????????.'+str(frequency)+'_'+str(var)+'.nc')]
-            file_extract,tag1f,tag2f=f.find_files_containing_1d(mylist,tag)
+            file_extract,tag1f,tag2f=f.find_files_containing_1d(mylist,tag,str(params.stylenom[machine][configuration][simulation]))
             indti,indtf=f.get_ind_xtrac_day_in_5days(tag,tag1f,str(frequency))
             f.use_template('script_'+str(operation)+'_2Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[configuration][simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'SCPATH':str(sliced.scratch_path[machine]),'INDTI':indti,'INDTF':indtf,'TAG1':tag1f,'TAG2':tag2f,'NCOPATH':str(sliced.nco_path[machine])})
     if operation[:6] == 'degrad':
@@ -121,6 +123,48 @@ def set_up_script_1simulationu_1region_1var_nomask(machine,configuration,simulat
     subprocess.call(["chmod", "+x", scriptname])
     return scriptname
 
+def set_up_script_1simulation_1region_1member_1var_nomask(machine,configuration,simulation,region,member,var,frequency,tag,year,mm,operation):
+    scriptname=('tmp_script_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_'+str(member)+'_'+str(var)+'_'+str(frequency)+'_'+str(tag)+'.ksh')
+    if len(tag)==10:
+        dd=tag[-2:]
+
+    #Get and fill the right template script depending on the operation
+    if operation == 'extract':
+        if params.vars_dim[var]=='2D':
+            outputname=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'/'+str(frequency)+'/'+str(member)+str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'d01.'+str(frequency)+'_'+str(var)+'.nc'
+        if not os.path.exists(outputname):
+           if params.vars_dim[var]=='2D':
+               f.use_template('script_'+str(operation)+'_2Dvar_1month_template.ksh', scriptname, {'CONFIGURATION':str(member)+str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[configuration][simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm), 'FILETYP':str(params.filetyp[configuration][simulation][var]), 'SOURCEDIR':str(params.directory[machine][configuration][simulation]), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'XX1':str(params.xy[configuration][region][0]),'XX2':str(params.xy[configuration][region][1]),'YY1':str(params.xy[configuration][region][2]),'YY2':str(params.xy[configuration][region][3]),'SCPATH':str(sliced.scratch_path[machine]),'NCOPATH':str(sliced.nco_path[machine])})
+    if operation == 'daily_files':
+        if str(params.frequencies_file[configuration][simulation][var])=='2y':
+            mylist = [files for files in glob.glob(str(params.directory[machine][configuration][simulation])+'/'+str(member)+str(configuration)+str(simulation)+'_'+str(frequency)+'_????????_????????_'+str(params.filetyp[configuration][simulation][var])+'.nc')]
+            year=int(tag[0:4])
+            month=int(tag[-2:])
+            w,nbdays=monthrange(year,month)
+            for day in np.arange(1,nbdays+1):
+                dd="{:02d}".format(day)
+                tagd=str(tag[0:4])+'-'+str(tag[-2:])+'-'+str(dd)
+                scriptnameday=('tmp_script_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_'+str(member)+'_'+str(var)+'_'+str(frequency)+'_'+str(tagd)+'.ksh')
+                file_extract,tag1f,tag2f=f.find_files_containing_1d(mylist,tagd,str(params.stylenom[machine][configuration][simulation]))
+                if file_extract:
+                    indti,indtf=f.get_ind_xtrac_day_in_5days(tagd,tag1f,str(frequency))
+                    f.use_template('script_'+str(operation)+'_2Dvar_1day_template.ksh', scriptnameday, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[configuration][simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'SCPATH':str(sliced.scratch_path[machine]),'INDTI':indti,'INDTF':indtf,'TAG1':tag1f,'TAG2':tag2f,'NCOPATH':str(sliced.nco_path[machine]),'SOURCEDIR':str(params.directory[machine][configuration][simulation]),'TYP':str(params.filetyp[configuration][simulation][var]),'MEMBER':str(member)})
+                    subprocess.call(["chmod", "+x", scriptnameday])
+                    with open(scriptname, 'a') as file:
+                        file.write("{}\n".format(' ./'+str(scriptnameday)))
+        elif str(params.frequencies_file[configuration][simulation][var])=='1m':
+            mylist = [files for files in glob.glob(str(params.directory[machine][configuration][simulation])+'/'+str(member)+str(configuration)+str(simulation)+'_'+str(frequency)+'_????????_????????_'+str(params.filetyp[configuration][simulation][var])+'.nc')]
+            file_extract,tag1f,tag2f=f.find_files_containing_1d(mylist,tag,str(params.stylenom[machine][configuration][simulation]))
+            indti,indtf=f.get_ind_xtrac_day_in_5days(tag,tag1f,str(frequency))
+            f.use_template('script_'+str(operation)+'_2Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[configuration][simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'SCPATH':str(sliced.scratch_path[machine]),'INDTI':indti,'INDTF':indtf,'TAG1':tag1f,'TAG2':tag2f,'NCOPATH':str(sliced.nco_path[machine]),'SOURCEDIR':str(params.directory[machine][configuration][simulation]),'TYP':str(params.filetyp[configuration][simulation][var]),'MEMBER':str(member)})
+
+        else:
+            return None
+
+    #Add the script to the mpmpd conf file
+    subprocess.call(["chmod", "+x", scriptname])
+    return scriptname
+
 def set_up_script_1simulation_1region_mask(machine,configuration,simulation,region,var,frequency,date_init,date_end,operation):
     scriptname=('tmp_script_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(region)+'_mask.ksh')
     if operation == 'extract':
@@ -130,7 +174,7 @@ def set_up_script_1simulation_1region_mask(machine,configuration,simulation,regi
     return scriptname
 
 
-def set_up_all_scripts(machine,configuration,simulations,regions,variables,frequency,date_init,date_end,operation):
+def set_up_all_scripts(machine,configuration,simulations,regions,members,variables,frequency,date_init,date_end,operation):
 
     list_scripts=[]
     
@@ -152,10 +196,14 @@ def set_up_all_scripts(machine,configuration,simulations,regions,variables,frequ
                     freq_par='1m'
                     print('We are going to do '+str(operation)+' on variable '+str(var)+' in parallel by month')
                     incr_temp=pd.date_range(date_init,date_end,freq='M')
-                if operation == 'apply_mask' or operation == 'daily_files':
+                if operation == 'apply_mask':
                     freq_par='1d'
                     print('We are going to do '+str(operation)+' on variable '+str(var)+' in parallel by day')
                     incr_temp=pd.date_range(date_init,date_end,freq='D')
+                if operation == 'daily_files':
+                    freq_par='1m'
+                    print('We are going to do '+str(operation)+' on variable '+str(var)+' in parallel by month')
+                    incr_temp=pd.date_range(date_init,date_end,freq='M')
             if params.vars_dim[var]=='3D':
                 if operation[:6] == 'degrad' or operation == 'extract' or operation == 'daily_mean' or operation == 'prof_flux_filt_inboxes':
                     freq_par='1d'
@@ -180,26 +228,40 @@ def set_up_all_scripts(machine,configuration,simulations,regions,variables,frequ
                 #Loop over simulations and regions
                 for simulation in simulations:
                     for region in regions:
-                        scriptname=set_up_script_1simulationu_1region_1var_nomask(machine,configuration,simulation,region,var,frequency,tag,year,mm,operation)
-                        if scriptname is not None:
-                            list_scripts.append(scriptname)
+                        if members[0]:
+                            for member in members:
+                                scriptname=set_up_script_1simulation_1region_1member_1var_nomask(machine,configuration,simulation,region,member,var,frequency,tag,year,mm,operation)
+                                if scriptname is not None:
+                                    list_scripts.append(scriptname)
+                        else:
+                            scriptname=set_up_script_1simulation_1region_1var_nomask(machine,configuration,simulation,region,var,frequency,tag,year,mm,operation)
+                            if scriptname is not None:
+                                list_scripts.append(scriptname)
     return list_scripts
 
-def run_all_scripts(list_scripts,machine,configuration,simulations,regions,variables,frequency,date_init,date_end,operation,job):
+def run_all_scripts(list_scripts,machine,configuration,simulations,regions,members,variables,frequency,date_init,date_end,operation,job):
     
     #Concatenate the name of all simulations and regions
     allregions=f.concatenate_all_names_in_list(regions)
     allsimulations=f.concatenate_all_names_in_list(simulations)
     allvariables=f.concatenate_all_names_in_list(variables)
 
+    if members[0]:
+        if len(members)==1:
+            allmembers=str(members[0])
+        else:
+            allmembers=str(members[0])+'-'+str(members[-1])
+    else:
+        allmembers=''
+
     #The scripts are run sequentially on the frontal node
     if job == 'N':
-        master_script='tmp_ms_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(allvariables)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
+        master_script='tmp_ms_'+str(operation)+'_'+str(machine)+'_'+str(allmembers)+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(allvariables)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
         for script in list_scripts:
             with open(master_script, 'a') as file:
                 file.write("{}\n".format(' ./'+str(script)))
         subprocess.call(["chmod", "+x", master_script])
-        subprocess.run(sliced.script_path[machine]+'/'+master_script,shell=True)
+        subprocess.run(sliced.script_path[machine]+'/slice/'+master_script,shell=True)
 
     #The scripts are distributed in mpdm files and will be run in parallel
     else:
@@ -209,8 +271,8 @@ def run_all_scripts(list_scripts,machine,configuration,simulations,regions,varia
         else:
             nb_proc_max=sliced.mprocs[operation]
         #Name of the first mpmd and job file
-        mpmdname='tmp_mpmd_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(allvariables)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
-        jobname='tmp_job_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(allvariables)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
+        mpmdname='tmp_mpmd_'+str(operation)+'_'+str(machine)+'_'+str(allmembers)+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(allvariables)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
+        jobname='tmp_job_'+str(operation)+'_'+str(machine)+'_'+str(allmembers)+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(allvariables)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
         shutil.copyfile('job_'+str(machine)+'_template.ksh',jobname)
         subprocess.call(["sed", "-i", "-e",  's/MPMDCONF/'+str(mpmdname)+'/g', jobname])
 
@@ -229,8 +291,8 @@ def run_all_scripts(list_scripts,machine,configuration,simulations,regions,varia
                 #The next job is set up
                 nb_jobs=nb_jobs+1
                 nb_procs=0
-                mpmdname='tmp_mpmd'+str(nb_jobs)+'_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(allvariables)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
-                jobname='tmp_job'+str(nb_jobs)+'_'+str(operation)+'_'+str(machine)+'_'+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(allvariables)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
+                mpmdname='tmp_mpmd'+str(nb_jobs)+'_'+str(operation)+'_'+str(machine)+'_'+str(allmembers)+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(allvariables)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
+                jobname='tmp_job'+str(nb_jobs)+'_'+str(operation)+'_'+str(machine)+'_'+str(allmembers)+str(configuration)+'_'+str(allsimulations)+'_'+str(allregions)+'_'+str(allvariables)+'_'+str(frequency)+'_'+str(date_init)+'_'+str(date_end)+'.ksh'
                 shutil.copyfile('job_'+str(machine)+'_template.ksh',jobname)
                 subprocess.call(["sed", "-i", "-e",  's/MPMDCONF/'+str(mpmdname)+'/g', jobname])
 
@@ -251,13 +313,13 @@ def main():
 
 
     print('Check if simulations details are all defined')
-    if da.operation == 'extract':
-        check(da.machine,da.configuration,da.simulations,da.regions,da.variables,da.frequency,da.date_init,da.date_end,da.operation)
+    #if da.operation == 'extract':
+    #    check(da.machine,da.configuration,da.simulations,da.regions,da.variables,da.frequency,da.date_init,da.date_end,da.operation)
     #print('Check if operation is permitted and document the process')
     #doc(da.machine,da.configuration,da.simulations,da.regions,da.variables,da.frequency,da.date_init,da.date_end,da.operation,da.job,param_dataset)
     print('Set up scripts and running them for operation '+str(da.operation)+' for '+str(param_dataset))
-    list_scripts=set_up_all_scripts(da.machine,da.configuration,da.simulations,da.regions,da.variables,da.frequency,da.date_init,da.date_end,da.operation)
-    run_all_scripts(list_scripts,da.machine,da.configuration,da.simulations,da.regions,da.variables,da.frequency,da.date_init,da.date_end,da.operation,da.job)
+    list_scripts=set_up_all_scripts(da.machine,da.configuration,da.simulations,da.regions,da.members,da.variables,da.frequency,da.date_init,da.date_end,da.operation)
+    run_all_scripts(list_scripts,da.machine,da.configuration,da.simulations,da.regions,da.members,da.variables,da.frequency,da.date_init,da.date_end,da.operation,da.job)
 
 
 if __name__ == "__main__":

@@ -27,6 +27,7 @@ BRODEAU_NST=brodeau_nst
 BRODEAU_eNATL=brodeau_enatl
 BRODEAU_eNATL_SPINUP=brodeau_enatl_spinup
 MOLINES=molines
+JMB=jmb
 
 ulimit -s unlimited
 
@@ -49,6 +50,16 @@ if [ "${STYLE}" == "${BRODEAU_eNATL}" ]; then
                 day=$(basename $file | awk -F_ '{print $6}' | awk -F- '{print $2}' | awk -F. '{print $1}')
                 DD=$(echo "${day: -2}")
                 fileo=${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}d${DD}.${FREQ}_${VAR}.nc
+                if [ ! -f  $fileo ]; then
+                        echo $fileo
+                        NCOPATH/ncks -O -F -d x,$X1,$X2 -d y,$Y1,$Y2 -v ${VARNAME} $file $fileo
+                fi
+        done
+fi
+
+if [ "${STYLE}" == "${JMB}" ]; then
+        for file in $(ls ${SDIR}/${CONFIG}${CASE}_y${YYYY}m${MM}d*.${FREQ}_${TYP}.nc); do
+		fileo=$(basename $file | sed "s/${TYP}/${VAR}/g")
                 if [ ! -f  $fileo ]; then
                         echo $fileo
                         NCOPATH/ncks -O -F -d x,$X1,$X2 -d y,$Y1,$Y2 -v ${VARNAME} $file $fileo
