@@ -1,5 +1,7 @@
 # atlaSlice
 
+test
+
 ## General description
 
 This package regroups 2 main purposes in one library : (1) produce pictures and (2) make extractions from NEMO outputs.
