@@ -38,7 +38,7 @@ variables=['SSH']
 frequency='1h'
 
 # Extra operation after extraction of raw outputs
-operation='extract' # extract then degrad3
+operation='archive_extract' # extract then degrad3
 
 # Perform the archive or not
 archive='Y'

@@ -42,8 +42,8 @@ ex['ENS']['MED']=''
 ex['CALEDO60']={}
 ex['CALEDO60']['CALEDO60']=''
 ex['eNATL60']={}
-ex['eNATL60']['eNATL60']=''
-for reg in ['SICIL','SICILext','SICILe','CARA','UKFR','aGS','aLS','aMNA','aMNA1','aMNA2','aMNA3','aMNA4','PORT']:
+ex['eNATL60']['eNATL']=''
+for reg in ['TYRR','SIDRA','SICIL','SICILext','SICILe','CARA','UKFR','aGS','aLS','aMNA','aMNA1','aMNA2','aMNA3','aMNA4','PORT','FAROE','ICEFAR']:
     ex['eNATL60'][reg]=str(reg)
 ex['DFS5.2']={}
 ex['DFS5.2']['NATL60']='NATL60'
@@ -71,6 +71,8 @@ mprocs['daily_files']=48
 mprocs['daily_mean']=30
 mprocs['degrad']=30
 mprocs['extract']=10
+mprocs['archive_extract']=10
+mprocs['archive_daily_mean']=30
 mprocs['compute_buoyancy']=10
 mprocs['compute_curl']=10
 mprocs['compute_curloverf']=10

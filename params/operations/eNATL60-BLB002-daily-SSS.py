@@ -19,35 +19,32 @@ configuration='eNATL60'
 
 # Name of the simulation, experiment or run
 # It must be one of the simulations for the above configuration stored on the above machine
-simulations=['BLBT02']
+simulations=['BLB002']
 
 # Name of the regions considered for extraction
 # It must have been defined for the selected configuration
-regions=['aLS']
-#regions=['aMNA1']
+regions=['eNATL']
 
 # Name of the variables considered for extraction
 # It must be in the list of acceptable variables
-variables=['T','S','U','V','W']
-#variables=['W']
+variables=['SSS']
 
 # Frequency of the output
 # It must be compatible for the simulation and variable
 frequency='1h'
 
 # Extra operation after extraction of raw outputs
-operation='extract' # extract then degrad3
+operation='daily_mean' # extract then daily_mean
 
 # Perform the archive or not
-archive='Y'
+archive='N'
 job='Y'
 
 # Wether data is already sitting on the store
 
 # Period of the extraction
 # Must be in the format yyyy-mm-dd
-#date_init='2009-07-01'
-date_init='2009-11-01'
-date_end='2009-11-06'
+date_init='2009-07-01'
+date_end='2010-06-30'
 
 

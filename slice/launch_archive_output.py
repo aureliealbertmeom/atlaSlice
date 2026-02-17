@@ -23,20 +23,20 @@ def make_script_archive_1sim_1typ_1day(machine,configuration,simulation,typ,freq
     tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(configuration)+'-'+str(simulation)+'-S'
     tarname=str(configuration)+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'d'+str(dd)+'.'+str(frequency)+'_'+str(typ)+'.tar'
     savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(typ)+'_'+str(frequency)+'_'+str(year)+str(mm)+str(dd)+'.ksh'
-    f.use_template('script_save_output_3Dvar_1day_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'VARIABLE':str(typ),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine]),'YON':inplace,'STYLENOM':params.stylenom[machine][configuration][simulation]})
+    f.use_template('script_save_output_3Dvar_1day_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'VARIABLE':str(typ),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine]),'STYLENOM':params.stylenom[machine][configuration][simulation]})
     subprocess.call(["chmod", "+x", savename])
     return savename
 
-def make_script_archive_1sim_1typ_1month(machine,configuration,simulation,typ,frequency,year,mm,inplace):
+def make_script_archive_1sim_1typ_1month(machine,configuration,simulation,typ,frequency,year,mm):
 
     tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(configuration)+'-'+str(simulation)+'-S'
     tarname=str(configuration)+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'.'+str(frequency)+'_'+str(typ)+'.tar'
     savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(typ)+'_'+str(frequency)+'_'+str(year)+str(mm)+'.ksh'
-    f.use_template('script_save_output_3Dvar_1month_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'VARIABLE':str(typ),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine]),'YON':inplace,'STYLENOM':params.stylenom[machine][configuration][simulation]})
+    f.use_template('script_save_output_3Dvar_1month_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'VARIABLE':str(typ),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine]),'STYLENOM':params.stylenom[machine][configuration][simulation]})
     subprocess.call(["chmod", "+x", savename])
     return savename
 
-def set_up_all_scripts(machine,configuration,simulations,variables,frequency,date_init,date_end,inplace):
+def set_up_all_scripts(machine,configuration,simulations,variables,frequency,date_init,date_end):
 
     list_scripts=[]
 
@@ -50,7 +50,7 @@ def set_up_all_scripts(machine,configuration,simulations,variables,frequency,dat
                             day=dm.day
                             mm="{:02d}".format(month)
                             dd="{:02d}".format(day)
-                            savename=make_script_archive_1sim_1typ_1day(machine,configuration,simulation,var,frequency,year,mm,dd,inplace)
+                            savename=make_script_archive_1sim_1typ_1day(machine,configuration,simulation,var,frequency,year,mm,dd)
                             list_scripts.append(savename)
                 else:
                     all_month=pd.date_range(date_init,date_end,freq='M')
@@ -58,12 +58,12 @@ def set_up_all_scripts(machine,configuration,simulations,variables,frequency,dat
                             year=ym.year
                             month=ym.month
                             mm="{:02d}".format(month)
-                            savename=make_script_archive_1sim_1typ_1month(machine,configuration,simulation,var,frequency,year,mm,inplace)
+                            savename=make_script_archive_1sim_1typ_1month(machine,configuration,simulation,var,frequency,year,mm)
                             list_scripts.append(savename)
 
     return list_scripts
 
-def run_all_scripts(list_scripts,machine,configuration,simulations,variables,frequency,date_init,date_end,operation,inplace):
+def run_all_scripts(list_scripts,machine,configuration,simulations,variables,frequency,date_init,date_end,operation):
     #Concatenate the name of all simulations and regions
     allsimulations=f.concatenate_all_names_in_list(simulations)
     allvariables=f.concatenate_all_names_in_list(variables)
@@ -110,8 +110,8 @@ def main():
     da = __import__(param_dataset)
 
     print('Checking the number of files produced for operation '+str(da.operation)+' for '+str(param_dataset))
-    list_scripts=set_up_all_scripts(da.machine,da.configuration,da.simulations,da.variables,da.frequency,da.date_init,da.date_end,da.inplace)
-    run_all_scripts(list_scripts,da.machine,da.configuration,da.simulations,da.variables,da.frequency,da.date_init,da.date_end,da.operation,da.inplace)
+    list_scripts=set_up_all_scripts(da.machine,da.configuration,da.simulations,da.variables,da.frequency,da.date_init,da.date_end)
+    run_all_scripts(list_scripts,da.machine,da.configuration,da.simulations,da.variables,da.frequency,da.date_init,da.date_end,da.operation)
 
 if __name__ == "__main__":
     main()
