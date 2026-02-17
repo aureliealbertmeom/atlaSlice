@@ -19,7 +19,7 @@ configuration='eNATL60'
 
 # Name of the simulation, experiment or run
 # It must be one of the simulations for the above configuration stored on the above machine
-simulations=['BLBT02']
+simulations=['BLBT02X']
 
 # Name of the regions considered for extraction
 # It must have been defined for the selected configuration
@@ -47,7 +47,7 @@ job='Y'
 # Period of the extraction
 # Must be in the format yyyy-mm-dd
 #date_init='2009-07-01'
-date_init='2009-11-01'
-date_end='2009-11-06'
+date_init='2009-11-07'
+date_end='2009-11-30'
 
 

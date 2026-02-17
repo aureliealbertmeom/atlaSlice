@@ -28,7 +28,7 @@ def check_output_1sim_1reg(machine,configuration,simulation,region,variables,fre
             for dm in all_day:
                 tag=f.tag_from_panda_day(dm)
                 if operation == 'extract':
-                    tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'/'+str(frequency)
+                    tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)
                     filed=tdir+'/'+str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_'+str(tag)+'.'+str(frequency)+'_'+str(var)+'.nc'
                     if not os.path.exists(filed):
                         err=err+1
@@ -49,7 +49,7 @@ def check_output_1sim_1reg(machine,configuration,simulation,region,variables,fre
             for month in all_month:
                 tag=f.tag_from_panda_month(month)
                 if operation == 'extract':
-                    tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'/'+str(frequency)
+                    tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)
                     filed=tdir+'/'+str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_'+str(tag)+'.'+str(frequency)+'_'+str(var)+'.nc'  
                     if not os.path.exists(filed):
                         err=err+1
@@ -84,20 +84,23 @@ def make_archive_1sim_1reg_1var(machine,configuration,simulation,region,var,freq
         yearf=all_month[-1].year
         for year in np.arange(yeari,yearf+1):
             if operation == 'extract':
-                tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'/'+str(frequency)
+                tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)
                 tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'.'+str(frequency)+'_'+str(var)+'.tar'
                 savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_'+str(var)+'_'+str(frequency)+'_'+str(year)+'.ksh'
                 f.use_template('script_save_2Dvar_1year_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':str(var),'FREQUENCY':str(frequency), 'YEAR':str(year), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
+                subprocess.call(["chmod", "+x", savename])
             if operation == 'compute_buoyancy':
                 tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)
                 tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'.'+str(frequency)+'_buoyancy.tar'
                 savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_buoyancy_'+str(frequency)+'_'+str(year)+'.ksh'
                 f.use_template('script_save_2Dvar_1year_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':'buoyancy','FREQUENCY':str(frequency), 'YEAR':str(year), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
+                subprocess.call(["chmod", "+x", savename])
             if operation[:6] == 'degrad':
                 tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'-'+str(operation)+'/'+str(frequency)
                 tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'.'+str(frequency)+'_'+str(var)+'-'+str(operation)+'.tar'
                 savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_'+str(var)+'-'+str(operation)+'_'+str(frequency)+'_'+str(year)+'.ksh'
                 f.use_template('script_save_2Dvar_1year_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':str(var)+'-'+str(operation),'FREQUENCY':str(frequency), 'YEAR':str(year), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
+                subprocess.call(["chmod", "+x", savename])
  
     if freq_par == '1m':
         all_month=pd.date_range(date_init,date_end,freq='M')
@@ -106,22 +109,24 @@ def make_archive_1sim_1reg_1var(machine,configuration,simulation,region,var,freq
             month=ym.month
             mm="{:02d}".format(month)
             if operation == 'extract':
-                tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'/'+str(frequency)
+                tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)
                 tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'.'+str(frequency)+'_'+str(var)+'.tar'
                 savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_'+str(var)+'-'+str(operation)+'_'+str(frequency)+'_'+str(year)+str(mm)+'.ksh'
                 f.use_template('script_save_3Dvar_1month_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':str(var),'FREQUENCY':str(frequency), 'YEAR':str(year),'MONTH':str(mm), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
+                subprocess.call(["chmod", "+x", savename])
             if operation == 'compute_buoyancy':
                 tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)
                 tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'.'+str(frequency)+'_buoyancy.tar'
                 savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_buoyancy_'+str(frequency)+'_'+str(year)+str(mm)+'.ksh'
                 f.use_template('script_save_3Dvar_1month_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':'buoyancy','FREQUENCY':str(frequency), 'YEAR':str(year),'MONTH':str(mm), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
+                subprocess.call(["chmod", "+x", savename])
             if operation[:6] == 'degrad':
-                tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'/'+str(region)+'-'+str(operation)+'/'+str(frequency)
+                tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(region)+'-'+str(operation)+'/'+str(frequency)
                 tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'.'+str(frequency)+'_'+str(var)+'-'+str(operation)+'.tar'
                 savename='tmp_script_save_'+str(machine)+'_'+str(configuration)+'_'+str(simulation)+'_'+str(region)+'_'+str(var)+'-'+str(operation)+'_'+str(frequency)+'_'+str(year)+str(mm)+'.ksh'
                 f.use_template('script_save_3Dvar_1month_template.ksh', savename, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':str(var)+'-'+str(operation),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
+                subprocess.call(["chmod", "+x", savename])
  
-    subprocess.call(["chmod", "+x", savename])
     return savename
 
 

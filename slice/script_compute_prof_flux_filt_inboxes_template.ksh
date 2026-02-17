@@ -8,7 +8,7 @@ VAR=VARIABLE
 FREQ=FREQUENCY
 DATE=YYYYMMDD
 
-source /lus/home/NAT/gda2307/aalbert/.bashrc
+source /lus/home/CT1/hmg2840/aalbert/.bashrc
 
 load_conda
 

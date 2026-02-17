@@ -24,7 +24,7 @@ simulations=['BLBT02']
 # Name of the regions considered for extraction
 # It must have been defined for the selected configuration
 #regions=['aGS']
-regions=['aMNA','aLS','aGS']
+regions=['aMNA']
 
 # Name of the variables considered for extraction
 # It must be in the list of acceptable variables

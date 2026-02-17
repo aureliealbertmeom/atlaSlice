@@ -1,0 +1,1 @@
+for var in buoyancy_flux_x dxbuoyancy_flux_x dybuoyancy_flux_x dzbuoyancy_flux_x buoyancy_flux_y dxbuoyancy_flux_y dybuoyancy_flux_y dzbuoyancy_flux_y buoyancy_flux_z dxbuoyancy_flux_z dybuoyancy_flux_z dzbuoyancy_flux_z; do for file in $(ls *m08*nc); do if [ -z "$(ncdump -h $file | grep "double "$var)" ]; then echo $file; fi; done; done

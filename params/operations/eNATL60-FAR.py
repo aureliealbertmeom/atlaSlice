@@ -23,20 +23,18 @@ simulations=['BLBT02']
 
 # Name of the regions considered for extraction
 # It must have been defined for the selected configuration
-regions=['aLS']
-#regions=['aMNA1']
+regions=['ICEFAR','FAROE']
 
 # Name of the variables considered for extraction
 # It must be in the list of acceptable variables
-variables=['T','S','U','V','W']
-#variables=['W']
+variables=['SSH','SST','SSS','U','V','T','S']
 
 # Frequency of the output
 # It must be compatible for the simulation and variable
 frequency='1h'
 
 # Extra operation after extraction of raw outputs
-operation='extract' # extract then degrad3
+operation='archive_daily_mean' # extract then daily_mean
 
 # Perform the archive or not
 archive='Y'
@@ -46,8 +44,7 @@ job='Y'
 
 # Period of the extraction
 # Must be in the format yyyy-mm-dd
-#date_init='2009-07-01'
-date_init='2009-11-01'
-date_end='2009-11-06'
+date_init='2009-07-01'
+date_end='2010-06-30'
 
 

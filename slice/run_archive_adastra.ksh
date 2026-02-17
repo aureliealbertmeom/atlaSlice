@@ -1,13 +1,14 @@
 #!/bin/bash
 
-source /lus/home/NAT/gda2307/aalbert/.bashrc
+source /lus/home/CT1/hmg2840/aalbert/.bashrc
 
 load_conda
-conda activate plots
+
+source /lus/work/CT1/hmg2840/aalbert/DEV/conda/atlaslice/bin/activate
 
 cd /lus/home/CT1/hmg2840/aalbert/git/atlaSlice/slice
 
-for param in eORCA36-L121-EXP15-S-archive.py; do
+for param in eNATL60-SIDRA.py ; do
 	ln -sf ../params/operations/$param .
-	python launch_archive_output.py -param "${param%.*}"
+	python launch_archive.py -param "${param%.*}"
 done

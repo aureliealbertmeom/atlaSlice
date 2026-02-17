@@ -25,7 +25,7 @@ ulimit -s unlimited
 
 SDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}-S/${FREQ}/${REG}
 
-if [ "$STYLE" -eq "$DFS" ]; then
+if [[ "$STYLE" == "$DFS" ]]; then
 	for file in $(ls ${SDIR}/${CONFIG}${SREG}_y${YYYY}m${MM}d??.${FREQ}_${VAR}.nc); do
 		fileo=$(basename $file | sed "s/${FREQ}/1d/g")
 		if [ ! -f  $fileo ]; then

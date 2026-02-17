@@ -6,11 +6,10 @@ VAR=VARIABLE
 FREQ=FREQUENCY
 YYYY=YEAR
 MM=MONTH
-INPLACE=YON
 STYLE=STYLENOM
 
-TDIR=/lus/work/NAT/gda2307/aalbert/${CONFIG}/${CONFIG}-${CASE}/${CONFIG}-${CASE}-S
-STDIR=/lus/work/CT1/hmg2840/aalbert/${CONFIG}/${CONFIG}-${CASE}/${CONFIG}-${CASE}-S
+TDIR=/lus/work/CT1/hmg2840/aalbert/${CONFIG}/${CONFIG}-${CASE}-S
+STDIR=/lus/work/CT1/hmg2840/aalbert/${CONFIG}/${CONFIG}-${CASE}-S
 
 if [ ! -d $TDIR ]; then
 	echo "Source directory does not exist, aborting operation"

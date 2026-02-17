@@ -104,6 +104,23 @@ def set_up_script_1simulationu_1region_1var_nomask(machine,configuration,simulat
                f.use_template('script_'+str(operation)+'_3Dvar_1day_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[configuration][simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'DAY':str(dd),'FILETYP':str(params.filetyp[configuration][simulation][var]), 'SOURCEDIR':str(params.directory[machine][configuration][simulation]), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'XX1':str(params.xy[configuration][region][0]),'XX2':str(params.xy[configuration][region][1]),'YY1':str(params.xy[configuration][region][2]),'YY2':str(params.xy[configuration][region][3]),'SCPATH':str(sliced.scratch_path[machine]),'NCOPATH':str(sliced.nco_path[machine])})
            if params.vars_dim[var]=='2D':
                f.use_template('script_'+str(operation)+'_2Dvar_1month_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region),'VARIABLE':str(var), 'VNAME':str(params.vars_name[configuration][simulation][var]),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm), 'FILETYP':str(params.filetyp[configuration][simulation][var]), 'SOURCEDIR':str(params.directory[machine][configuration][simulation]), 'STYLENOM':str(params.stylenom[machine][configuration][simulation]),'XX1':str(params.xy[configuration][region][0]),'XX2':str(params.xy[configuration][region][1]),'YY1':str(params.xy[configuration][region][2]),'YY2':str(params.xy[configuration][region][3]),'SCPATH':str(sliced.scratch_path[machine]),'NCOPATH':str(sliced.nco_path[machine])})
+    if operation == 'archive_extract' or operation == 'archive_daily_mean':
+        if operation == 'archive_daily_mean':
+            frequency='1d'
+        if params.vars_dim[var]=='3D':
+            outputname=str(params.store_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)+'/'+str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'.'+str(frequency)+'_'+str(var)+'.tar'
+        if params.vars_dim[var]=='2D':
+            outputname=str(params.store_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)+'/'+str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'.'+str(frequency)+'_'+str(var)+'.tar'
+        if not os.path.exists(outputname):
+           if params.vars_dim[var]=='3D':
+               tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)
+               tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'.'+str(frequency)+'_'+str(var)+'.tar'
+               f.use_template('script_save_3Dvar_1month_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':str(var),'FREQUENCY':str(frequency), 'YEAR':str(year),'MONTH':str(mm), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
+           if params.vars_dim[var]=='2D':
+               tdir=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)
+               tarname=str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'.'+str(frequency)+'_'+str(var)+'.tar'
+               f.use_template('script_save_2Dvar_1year_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region), 'VARIABLE':str(var),'FREQUENCY':str(frequency), 'YEAR':str(year), 'TARNAME':str(tarname), 'SCPATH':str(tdir), 'STPATH':str(params.store_path[machine])})
+
 
         else:
             return None
@@ -156,6 +173,15 @@ def set_up_all_scripts(machine,configuration,simulations,regions,variables,frequ
                     freq_par='1d'
                     print('We are going to do '+str(operation)+' on variable '+str(var)+' in parallel by day')
                     incr_temp=pd.date_range(date_init,date_end,freq='D')
+                if operation == 'archive_extract' or operation == 'archive_daily_mean':
+                    print('We are going to archive variable '+str(var)+' year by year')
+                    freq_par='1y'
+                    all_month=pd.date_range(date_init,date_end,freq='M')
+                    yeari=all_month[0].year
+                    yearf=all_month[-1].year
+                    datei=str(yeari)+'-01-01'
+                    datef=str(yearf)+'-01-01'
+                    incr_temp=pd.date_range(datei,datef,freq='YS')
             if params.vars_dim[var]=='3D':
                 if operation[:6] == 'degrad' or operation == 'extract' or operation == 'daily_mean' or operation == 'prof_flux_filt_inboxes':
                     freq_par='1d'
@@ -164,6 +190,10 @@ def set_up_all_scripts(machine,configuration,simulations,regions,variables,frequ
                     else:
                         print('We are going to do '+str(operation)+' on variable '+str(var)+' in parallel by day')
                     incr_temp=pd.date_range(date_init,date_end,freq='D')
+                if operation == 'archive_extract' or operation == 'archive_daily_mean':
+                    print('We are going to archive variable '+str(var)+' month by month')
+                    freq_par='1m'
+                    incr_temp=pd.date_range(date_init,date_end,freq='M')
 
             #Loop over the dates composing the period
             for ym in incr_temp:
@@ -176,6 +206,8 @@ def set_up_all_scripts(machine,configuration,simulations,regions,variables,frequ
                     day=ym.day
                     dd="{:02d}".format(day)
                     tag=str(year)+'-'+str(mm)+'-'+str(dd)
+                if freq_par == '1y':
+                    tag=str(year)
 
                 #Loop over simulations and regions
                 for simulation in simulations:
@@ -251,8 +283,8 @@ def main():
 
 
     print('Check if simulations details are all defined')
-    if da.operation == 'extract':
-        check(da.machine,da.configuration,da.simulations,da.regions,da.variables,da.frequency,da.date_init,da.date_end,da.operation)
+    #if da.operation == 'extract':
+    #    check(da.machine,da.configuration,da.simulations,da.regions,da.variables,da.frequency,da.date_init,da.date_end,da.operation)
     #print('Check if operation is permitted and document the process')
     #doc(da.machine,da.configuration,da.simulations,da.regions,da.variables,da.frequency,da.date_init,da.date_end,da.operation,da.job,param_dataset)
     print('Set up scripts and running them for operation '+str(da.operation)+' for '+str(param_dataset))
