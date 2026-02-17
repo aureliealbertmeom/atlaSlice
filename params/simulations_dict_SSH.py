@@ -65,8 +65,8 @@ for sim in ['BLBT02','BLB002']:
     directory['dahu']['eNATL60'][sim]='/summer/meom/MODEL_SET/eNATL60'
 directory['jean-zay']={}
 directory['jean-zay']['ENS']={}
-directory['jean-zay']['ENS']['04']='/lustre/fsstor/projects/rech/egi/regi700/Nemo-med/Resu/ENS04'
-#directory['jean-zay']['ENS']['04']='/lustre/fsn1/projects/rech/cli/rote001/ENS/ENS-04/MED/1d'
+#directory['jean-zay']['ENS']['04']='/lustre/fsstor/projects/rech/egi/regi700/Nemo-med/Resu/ENS04'
+directory['jean-zay']['ENS']['04']='/lustre/fsn1/projects/rech/cli/rote001/ENS/ENS-04/MED/1d'
 
 
 stylenom={}
@@ -166,7 +166,7 @@ for reg in ['aGS','aLS','aMNA']:
 regions_list={}
 regions_list['ENS']=['MED']
 regions_list['CALEDO60']=['CALEDO60']
-regions_list['eNATL60']=['eNATL60','FARSHE','FAROE','ICEFAR','TYRR','SIDRA','SICIL','SICILe','SICILext','CARA','UKFR','aGS','aLS','aMNA','aMNA1','aMNA2','aMNA3','aMNA4','PORT']
+regions_list['eNATL60']=['eNATL60','SICIL','SICILe','SICILext','CARA','UKFR','aGS','aLS','aMNA','aMNA1','aMNA2','aMNA3','aMNA4','PORT']
 regions_list['NATL60']=['NATL60','GULF']
 regions_list['DFS5.2']=['NATL60','eNATL60']
 
@@ -182,7 +182,7 @@ xy['CALEDO60']={}
 xy['CALEDO60']['CALEDO60']=[0,787,0,852]
 
 xy['eORCA36.L121']={}
-xy['eORCA36.L121']['global']=[1,12959,1,10841]
+xy['eORCA36.L121']['global']=[0,12959,0,10841]
 xy['eORCA36.L121']['natl']=[6732,10504,6152,8924]
 xy['eORCA36.L121']['satl']=[7812,11052,3436,6152]
 xy['eORCA36.L121']['windian']=[11052,12959,3436,7292]
@@ -193,13 +193,8 @@ xy['eORCA36.L121']['med']=[9972,12042,7289,8400]
 xy['eORCA36.L121']['eqpac']=[1972,7500,6152,6152]
 
 xy['eNATL60']={}
-xy['eNATL60']['eNATL']=[1,8354,1,4729]
-xy['eNATL60']['FARSHE']=[5220,5812,4048,4550]
-xy['eNATL60']['ICEFAR']=[4630,5260,3928,4560]
-xy['eNATL60']['FAROE']=[5260,5812,3928,4560]
+xy['eNATL60']['eNATL60']=[0,8354,0,4729]
 xy['eNATL60']['SICIL']=[6352,6935,1656,2311]
-xy['eNATL60']['SIDRA']=[6738,7043,1553,1876]
-xy['eNATL60']['TYRR']=[6640,6782,2209,2391]
 xy['eNATL60']['SICILext']=[6352,7035,1556,2311]
 xy['eNATL60']['SICILe']=[6735,7035,1556,1876]
 xy['eNATL60']['CARA']=[1,2524,1,1900]
@@ -216,7 +211,7 @@ xy['eNATL60']['aMNA2']='-d x,4060,4682 -d y,2941,3568'
 xy['eNATL60']['aMNA3']='-d x,3462,4084 -d y,2941,3568'
 xy['eNATL60']['aMNA4']='-d x,4060,4682 -d y,2337,2965'
 xy['NATL60']={}
-xy['NATL60']['NATL60']=[1,5422,1,3454]
+xy['NATL60']['NATL60']=[0,5422,0,3454]
 xy['NATL60']['GULF']=[929,1667,379,1306]
 
 
@@ -371,8 +366,8 @@ for simu in ['EXP15-10','EXP13-10','EXP22a-10','EXP22b-10','EXP22c-10','EXP22d-1
 frequencies_file={}
 frequencies_file['ENS']={}
 frequencies_file['ENS']['04']={}
-frequencies_file['ENS']['04']['SSH']='2y'
-#frequencies_file['ENS']['04']['SSH']='1d'
+#frequencies_file['ENS']['04']['SSH']='2y'
+frequencies_file['ENS']['04']['SSH']='1d'
 frequencies_file['eNATL60']={}
 for simu in ['BLB002','BLBT02','BLB002X','BLBT02X']:
     frequencies_file['eNATL60'][simu]={'MOC':'1d','SSH':'1d','SSS':'1d','SST':'1d','SSU':'1d','SSV':'1d','T':'1d','S':'1d','U':'1d','V':'1d','W':'1d','curloverf':'1d'}

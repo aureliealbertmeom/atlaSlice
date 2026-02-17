@@ -27,6 +27,8 @@ BRODEAU_eNATL=brodeau_enatl
 BRODEAU_eNATL_SPINUP=brodeau_enatl_spinup
 MOLINES=molines
 DFS=dfs
+JMB=jmb
+
 ulimit -s unlimited
 
 if [ "${STYLE}" == "${DFS}" ]; then
@@ -61,4 +63,19 @@ if [ "${STYLE}" == "${BRODEAU_eNATL_SPINUP}" ]; then
         done
 fi
 
+if [ "${STYLE}" == "${JMB}" ]; then
+        for file in $(ls SOURCEDIR/MEMBER${CONFIG}${SREG}${CASE}_${FREQ}_TAG1_TAG2_TYP.nc); do
+
+                fileo=MEMBER${CONFIG}${SREG}${CASE}_y${YYYY}m${MM}d${DD}.${FREQ}_TYP.nc
+
+                if [ ! -f  $fileo ]; then
+
+                        echo $fileo
+
+                        NCOPATH/ncks -F -d time_counter,$TI,$TF $file $fileo
+
+
+                fi
+        done
+fi
 
