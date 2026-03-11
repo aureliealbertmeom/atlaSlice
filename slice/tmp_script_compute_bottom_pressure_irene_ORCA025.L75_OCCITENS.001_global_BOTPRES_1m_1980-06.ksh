@@ -7,14 +7,14 @@ SREG=
 FREQ=1m
 YYYY=1980
 MM=06
-DD=DAY
 
 TDIR=/ccc/scratch/cont003/gen12020/alberaur/${CONFIG}/${CONFIG}-${CASE}-S/${FREQ}/${REG}
+mkdir -p
 cd $TDIR
 
 echo "We are in " $TDIR
 
-SDIR=/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-OCCITENS.001-S/${FREQ}/${1980}
+SDIR=/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-OCCITENS.001-S/${FREQ}/1980
 
 ulimit -s unlimited
 
