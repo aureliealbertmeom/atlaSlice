@@ -7,6 +7,7 @@ machine_list=['adastra','jean-zay','irene','cal1','dahu']
 # Directories on each machine
 
 store_path={}
+store_path['irene']='/ccc/store/cont003/gen12020/alberaur'
 store_path['adastra']='/lus/store/CT1/hmg2840/aalbert/'
 store_path['cal1']='/mnt/summer/DATA_MEOM/MODEL_SET/'
 store_path['dahu']='/summer/meom/MODEL_SET'
@@ -19,9 +20,13 @@ configuration_list['adastra']=['CALEDO60','eORCA36.L121','eNATL60','DFS5.2','NAT
 configuration_list['jean-zay']=['ENS']
 configuration_list['cal1']=['eNATL60']
 configuration_list['dahu']=['eNATL60']
+configuration_list['irene']=['ORCA025.L75']
 
 # All the simulations run with each configuration on each machine
 simulation_list={}
+simulation_list['irene']={}
+simulation_list['irene']['ORCA025.L75']=['OCCITENS.001']
+
 simulation_list['adastra']={}
 simulation_list['adastra']['eNATL60']=['BLBT02','BLB002','BLBT01','BLB001','BLBT02X','BLB002X','grid']
 simulation_list['adastra']['CALEDO60']=['TRPC12NT0','TRPC12N00']
@@ -39,6 +44,10 @@ simulation_list['jean-zay']['ENS']=['04']
 # Where to find the -S directory for a given simulation of a configuration on a machine and how it is organized
 
 directory={}
+directory['irene']={}
+directory['irene']['ORCA025.L75']={}
+directory['irene']['ORCA025.L75']['OCCITENS.001']='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-OCCITENS.001-S'
+
 directory['adastra']={}
 directory['adastra']['eNATL60']={}
 for sim in ['BLBT02','BLB002','BLBT01','BLB001','BLBT02X','BLB002X']:
@@ -84,6 +93,10 @@ stylenom['adastra']['NATL60']={}
 for sim in ['CJM165']:
     stylenom['adastra']['NATL60'][sim]='molines'
 
+stylenom['irene']={}
+stylenom['irene']['ORCA025.L75']={}
+stylenom['irene']['ORCA025.L75']['OCCITENS.001']='molines'
+
 stylenom['adastra']['eORCA36.L121']={}
 for simu in ['EXP15-10','EXP13-10','EXP22a-10','EXP22b-10','EXP22c-10','EXP22d-10','EXP22e-10','EXP22f-10','EXP22g-10','EXP22h-10','EXP09']:
     stylenom['adastra']['eORCA36.L121'][simu]='aalbert_gda'
@@ -112,6 +125,9 @@ maskfile['dahu']={}
 maskfile['dahu']['eNATL60']={}
 for reg in ['aGS','aLS','aMNA']:
 	maskfile['dahu']['eNATL60'][reg]='/summer/meom/MODEL_SET/eNATL60/eNATL60-I/mask_eNATL60'+str(reg)+'_3.6.nc'
+maskfile['irene']={}
+maskfile['irene']['ORCA025.L75']={}
+maskfile['irene']['ORCA025.L75']['OCCITENS.001']='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-I/ORCA025.L75-MJM91_byte_mask.nc'
 
 bathyfile={}
 bathyfile['adastra']={}
@@ -142,6 +158,9 @@ mesh_hgr['dahu']={}
 mesh_hgr['dahu']['eNATL60']={}
 for reg in ['aGS','aLS','aMNA']:
 	mesh_hgr['dahu']['eNATL60'][reg]='/summer/meom/MODEL_SET/eNATL60/eNATL60-I/mesh_hgr_eNATL60'+str(reg)+'_3.6.nc'
+mesh_hgr['irene']={}
+mesh_hgr['irene']['ORCA025.L75']={}
+mesh_hgr['irene']['ORCA025.L75']['OCCITENS.001']='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-I/ORCA025.L75-MJM91_mesh_hgr.nc'
 
 mesh_zgr={}
 mesh_zgr['adastra']={}
@@ -160,6 +179,9 @@ mesh_zgr['dahu']={}
 mesh_zgr['dahu']['eNATL60']={}
 for reg in ['aGS','aLS','aMNA']:
 	mesh_zgr['dahu']['eNATL60'][reg]='/summer/meom/MODEL_SET/eNATL60/eNATL60-I/mesh_zgr_eNATL60'+str(reg)+'_3.6.nc'
+mesh_zgr['irene']={}
+mesh_zgr['irene']['ORCA025.L75']={}
+mesh_zgr['irene']['ORCA025.L75']['OCCITENS.001']='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-I/ORCA025.L75-MJM91_mesh_zgr.nc'
 
 # All the regions we can extract or plot in 2D maps for each configuration
 
@@ -169,6 +191,7 @@ regions_list['CALEDO60']=['CALEDO60']
 regions_list['eNATL60']=['eNATL60','FARSHE','FAROE','ICEFAR','TYRR','SIDRA','SICIL','SICILe','SICILext','CARA','UKFR','aGS','aLS','aMNA','aMNA1','aMNA2','aMNA3','aMNA4','PORT']
 regions_list['NATL60']=['NATL60','GULF']
 regions_list['DFS5.2']=['NATL60','eNATL60']
+regions_list['ORCA025.L75']=['global']
 
 regions_list['eORCA36.L121']=['eORCA','global','natl','satl','arctic','antarctic','indian','windian','eindian','npac','spac','med','npole','spole','eqpac',
                               'madagascar','bassas','glorieuses','juan','tromelin','mascaraignes']
@@ -180,6 +203,9 @@ xy['ENS']={}
 xy['ENS']['MED']=[1,566,1,264]
 xy['CALEDO60']={}
 xy['CALEDO60']['CALEDO60']=[0,787,0,852]
+
+xy['ORCA025.L75']={}
+xy['ORCA025.L75']['global']=[0,1441,0,1020]
 
 xy['eORCA36.L121']={}
 xy['eORCA36.L121']['global']=[1,12959,1,10841]
@@ -224,7 +250,7 @@ xy['NATL60']['GULF']=[929,1667,379,1306]
 
 variable_list=['SSH','SSU','SSV','SSS','SST','T','S','U','V','W','TAUM','TAUBOT','QTOCE','QSROCE','QSBOCE','QNSOCE','QLWOCE','QLAOCE','PRECIP','EVAPOCE',
                'EMPMR','WINDSP','RHOAIR','MLD','SBU','TAUUO','SBV','TAUVO','SICONC','SITHIC','MOD','VORT','NETDHEATFLX','SWDHEATFLX','QNS','LDHEATFLX',
-               'LWDHEATFLX','SDHEATFLX','NETUPWFLX','DSALTFLX','DAMPWFLX','bathy','MOC','u10','v10','u10m','v10m','BOTU','BOTV','buoyancy','mask','curloverf']
+               'LWDHEATFLX','SDHEATFLX','NETUPWFLX','DSALTFLX','DAMPWFLX','bathy','MOC','u10','v10','u10m','v10m','BOTU','BOTV','buoyancy','mask','curloverf','BOTPRES']
 
 
 vars_dim={}
@@ -232,11 +258,14 @@ for var in ['SSH','SSU','SSV','SSS','SST','TAUM','TAUBOT','QTOCE','QSROCE','QSBO
             'RHOAIR','MLD','SBU','TAUUO','SBV','TAUVO','SICONC','SITHIC','NETDHEATFLX','SWDHEATFLX','QNS','LDHEATFLX','LWDHEATFLX','SDHEATFLX',
             'NETUPWFLX','DSALTFLX','DAMPWFLX','MOD','VORT','bathy','MOC','u10','v10','u10m','v10m','BOTU','BOTV']:
     vars_dim[var]='2D'
-for var in ['T','S','U','V','W','buoyancy','curloverf']:
+for var in ['T','S','U','V','W','buoyancy','curloverf','BOTPRES']:
     vars_dim[var]='3D'
 
 
 vars_name={}
+vars_name['ORCA025.L75']={}
+vars_name['ORCA025.L75']['OCCITENS.001']={}
+vars_name['ORCA025.L75']['OCCITENS.001']['BOTPRES']='sobotpres'
 vars_name['eNATL60']={}
 for sim in ['BLBT02','BLB002','BLBT01','BLB001','BLBT02X','BLB002X']:
     vars_name['eNATL60'][sim]={'SSH':'sossheig','SSU':'sozocrtx','SSV':'somecrty','SST':'sosstsst','SSS':'sosaline','MLD':'somxl010',
@@ -262,6 +291,9 @@ vars_name['ENS']['04']={}
 vars_name['ENS']['04']['SSH']='sossheig'
 
 filetyp={}
+filetyp['ORCA025.L75']={}
+filetyp['ORCA025.L75']['OCCITENS.001']={}
+filetyp['ORCA025.L75']['OCCITENS.001']['BOTPRES']='gridT'
 filetyp['eNATL60']={}
 for sim in ['BLBT02','BLB002','BLBT02X','BLB002X']:
     filetyp['eNATL60'][sim]={'SSH':'gridT-2D','SSS':'gridT-2D','SST':'gridT-2D','MLD':'gridT-2D','SSU':'gridU-2D','SSV':'gridV-2D','T':'gridT',
@@ -338,7 +370,7 @@ for var in ['W','MOC'] :
 
 varpt={'T':'T','S':'T','SSH':'T','SST':'T','SSS':'T','SSU':'U','SSV':'V','U':'U','V':'V','W':'W','TAUM':'T','TAUBOT':'T','QTOCE':'T','QSROCE':'T',
        'QSBOCE':'T','QNSOCE':'T','QLWOCE':'T','QLAOCE':'T','PRECIP':'T','EVAPOCE':'T','EMPMR':'T','WINDSP':'T','RHOAIR':'T','MLD':'T','BOTU':'U',
-       'TAUUO':'U','BOTV':'V','TAUVO':'V','u10':'U','v10':'V','u10m':'U','v10m':'V','curloverf':'U'}
+       'TAUUO':'U','BOTV':'V','TAUVO':'V','u10':'U','v10':'V','u10m':'U','v10m':'V','curloverf':'U','BOTPRES':'T'}
 
 
 compute={}
@@ -352,10 +384,13 @@ for var in ['MOD','VORT']:
 compute_vars={}
 for var in ['MOD','VORT']:
     compute_vars[var]=['U','V']
+compute_vars['BOTPRES']='T'
 
 # The time frequency available for a given variable and simulation
 
 frequencies={}
+frequencies['ORCA025.L75']={}
+frequencies['ORCA025.L75']['OCCITENS.001']={'BOTPRES':'1m'}
 frequencies['ENS']={}
 frequencies['ENS']['04']={'SSH':'1d'}
 frequencies['eNATL60']={}
@@ -371,6 +406,8 @@ for simu in ['EXP15-10','EXP13-10','EXP22a-10','EXP22b-10','EXP22c-10','EXP22d-1
 frequencies_file={}
 frequencies_file['ENS']={}
 frequencies_file['ENS']['04']={}
+frequencies_file['ORCA025.L75']={}
+frequencies_file['ORCA025.L75']['OCCITENS.001']={'BOTPRES':'1m'}
 frequencies_file['ENS']['04']['SSH']='2y'
 #frequencies_file['ENS']['04']['SSH']='1d'
 frequencies_file['eNATL60']={}
@@ -424,11 +461,18 @@ sim_date_init['DFS5.2']={}
 sim_date_end['DFS5.2']={}
 sim_date_init['DFS5.2']['DFS5.2']='1958'
 sim_date_end['DFS5.2']['DFS5.2']='2015'
+
 sim_date_init['NATL60']={}
 sim_date_end['NATL60']={}
 sim_date_init['NATL60']['CJM165']='2012-06-14'
 sim_date_end['NATL60']['CJM165']='2013-10-01'
+
 sim_date_init['ENS']={}
 sim_date_end['ENS']={}
 sim_date_init['ENS']['04']='1979-06-27'
 sim_date_end['ENS']['04']='2020-12-27'
+
+sim_date_init['ORCA025.L75']={}
+sim_date_end['ORCA025.L75']={}
+sim_date_init['ORCA025.L75']['OCCITENS.001']='1980-01-01'
+sim_date_end['ORCA025.L75']['OCCITENS.001']='1980-12-31'

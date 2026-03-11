@@ -2,23 +2,27 @@
 # Directories for soecific tools on each machine
 
 script_path={}
+script_path['irene']='/home/alberta/sshfs-irene-dev/atlaSlice/slice'
 script_path['adastra']='/lus/home/CT1/hmg2840/aalbert/git/atlaSlice/slice'
 script_path['cal1']='/home/alberta/git/atlaSlice/slice'
 script_path['dahu']='/bettik/alberta/git/atlaSlice'
 script_path['jean-zay']='/lustre/fswork/projects/rech/cli/rote001/DEV/git/atlaSlice'
 
 params_path={}
+params_path['irene']='/home/alberta/sshfs-irene-dev/atlaSlice/params'
 params_path['adastra']='/lus/home/CT1/hmg2840/aalbert/git/atlaSlice/params'
 params_path['cal1']='/home/alberta/git/atlaSlice/params'
 params_path['dahu']='/bettik/alberta/git/atlaSlice/params'
 params_path['jean-zay']='/lustre/fswork/projects/rech/cli/rote001/DEV/git/atlaSlice/params'
 
 nco_path={}
+nco_path['irene']='/ccc/products/nco-5.0.1/intel--20.0.0/default/bin/ncks'
 nco_path['adastra']='/opt/software/gaia/prod/3.2.0/__spack_path_placeholder__/__spack_path_placeholder__/__spack_path_placeholder__/__spack_path_plac/nco-5.1.9-gcc-12.1.generic-3z7d/bin/'
 nco_path['cal1']='/home/alberta/micromamba/envs/plots/bin'
 nco_path['jean-zay']='/gpfslocalsup/spack_soft/nco/4.9.3/intel-19.0.4-gyk4x3jcbjigff5av2qbo2pefawaozyd/bin'
 
 cdf_path={}
+cdf_path['irene']='/ccc/work/cont003/gen12020/alberaur/DEV/CDFTOOLS/bin'
 cdf_path['adastra']='/lus/work/CT1/hmg2840/aalbert/git/CDFTOOLS/bin/'
 cdf_path['cal1']='/opt/modules/cdftools/bin'
 
@@ -27,6 +31,7 @@ sosie_path['adastra']='/lus/work/CT1/hmg2840/aalbert/DEV/sosie'
 
 scratch_path={}
 #scratch_path['adastra']='/lus/store/CT1/hmg2840/aalbert'
+scratch_path['irene']='/ccc/scratch/cont003/gen12020/alberaur'
 scratch_path['adastra']='/lus/work/CT1/hmg2840/aalbert'
 #scratch_path['adastra']='/lus/work/NAT/gda2307/aalbert'
 #scratch_path['adastra']='/lus/scratch/CT1/hmg2840/aalbert/TMPEXTRACT'
@@ -53,6 +58,8 @@ ex['NATL60']['NATL60']=''
 ex['NATL60']['GULF']='GULF'
 ex['eORCA36.L121']={}
 ex['eORCA36.L121']['eORCA36']=''
+ex['ORCA025.L75']={}
+ex['ORCA025.L75']['global']=''
 
 # Parameters for profiles in 1°x1° boxes
 
@@ -76,4 +83,5 @@ mprocs['archive_daily_mean']=30
 mprocs['compute_buoyancy']=10
 mprocs['compute_curl']=10
 mprocs['compute_curloverf']=10
+mprocs['compute_bottom_pressure']=10
 mprocs['prof_flux_filt_inboxes']=10
