@@ -9,7 +9,7 @@ YYYY=YEAR
 MM=MONTH
 
 TDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}-S/${FREQ}/${REG}
-mkdir -p
+mkdir -p $TDIR
 cd $TDIR
 
 echo "We are in " $TDIR

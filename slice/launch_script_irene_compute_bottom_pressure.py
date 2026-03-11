@@ -41,6 +41,7 @@ for ym in incr_temp:
     outputname=str(sliced.scratch_path[machine])+'/'+str(configuration)+'/'+str(configuration)+'-'+str(simulation)+'-S/'+str(frequency)+'/'+str(region)+'/'+str(configuration)+str(sliced.ex[configuration][region])+'-'+str(simulation)+'_y'+str(year)+'m'+str(mm)+'.'+str(frequency)+'_'+str(compute_var)+'.nc'
 
     f.use_template('script_'+str(operation)+'_3Dvar_1month_template.ksh', scriptname, {'CONFIGURATION':str(configuration),'SIMULATION':str(simulation),'REGIONABR':str(sliced.ex[configuration][region]), 'REGIONNAME':str(region),'FREQUENCY':str(frequency), 'YEAR':str(year), 'MONTH':str(mm),'SOURCEDIR':str(params.directory[machine][configuration][simulation]),'SCPATH':str(sliced.scratch_path[machine]),'CDFPATH':str(sliced.cdf_path[machine]),'MASKFILE':str(params.maskfile[machine][configuration][region]),'MESHHFILE':str(params.mesh_hgr[machine][configuration][region]),'MESHZFILE':str(params.mesh_zgr[machine][configuration][region])})
+    subprocess.call(["chmod", "+x", scriptname])
     list_scripts.append(scriptname)
 
 allregions=f.concatenate_all_names_in_list(regions)

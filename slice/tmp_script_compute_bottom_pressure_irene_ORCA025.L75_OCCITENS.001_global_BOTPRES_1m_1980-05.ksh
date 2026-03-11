@@ -9,7 +9,7 @@ YYYY=1980
 MM=05
 
 TDIR=/ccc/scratch/cont003/gen12020/alberaur/${CONFIG}/${CONFIG}-${CASE}-S/${FREQ}/${REG}
-mkdir -p
+mkdir -p $TDIR
 cd $TDIR
 
 echo "We are in " $TDIR
