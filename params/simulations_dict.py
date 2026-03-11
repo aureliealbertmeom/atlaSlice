@@ -127,7 +127,7 @@ for reg in ['aGS','aLS','aMNA']:
 	maskfile['dahu']['eNATL60'][reg]='/summer/meom/MODEL_SET/eNATL60/eNATL60-I/mask_eNATL60'+str(reg)+'_3.6.nc'
 maskfile['irene']={}
 maskfile['irene']['ORCA025.L75']={}
-maskfile['irene']['ORCA025.L75']['OCCITENS.001']='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-I/ORCA025.L75-MJM91_byte_mask.nc'
+maskfile['irene']['ORCA025.L75']['global']='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-I/ORCA025.L75-MJM91_byte_mask.nc'
 
 bathyfile={}
 bathyfile['adastra']={}
@@ -160,7 +160,7 @@ for reg in ['aGS','aLS','aMNA']:
 	mesh_hgr['dahu']['eNATL60'][reg]='/summer/meom/MODEL_SET/eNATL60/eNATL60-I/mesh_hgr_eNATL60'+str(reg)+'_3.6.nc'
 mesh_hgr['irene']={}
 mesh_hgr['irene']['ORCA025.L75']={}
-mesh_hgr['irene']['ORCA025.L75']['OCCITENS.001']='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-I/ORCA025.L75-MJM91_mesh_hgr.nc'
+mesh_hgr['irene']['ORCA025.L75']['global']='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-I/ORCA025.L75-MJM91_mesh_hgr.nc'
 
 mesh_zgr={}
 mesh_zgr['adastra']={}
@@ -181,7 +181,7 @@ for reg in ['aGS','aLS','aMNA']:
 	mesh_zgr['dahu']['eNATL60'][reg]='/summer/meom/MODEL_SET/eNATL60/eNATL60-I/mesh_zgr_eNATL60'+str(reg)+'_3.6.nc'
 mesh_zgr['irene']={}
 mesh_zgr['irene']['ORCA025.L75']={}
-mesh_zgr['irene']['ORCA025.L75']['OCCITENS.001']='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-I/ORCA025.L75-MJM91_mesh_zgr.nc'
+mesh_zgr['irene']['ORCA025.L75']['global']='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-I/ORCA025.L75-MJM91_mesh_zgr.nc'
 
 # All the regions we can extract or plot in 2D maps for each configuration
 

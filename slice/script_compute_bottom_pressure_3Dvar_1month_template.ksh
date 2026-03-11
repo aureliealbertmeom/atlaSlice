@@ -4,17 +4,17 @@ CONFIG=CONFIGURATION
 CASE=SIMULATION
 REG=REGIONNAME
 SREG=REGIONABR
-VAR=VARIABLE
-VARNAME=VNAME
 FREQ=FREQUENCY
 YYYY=YEAR
 MM=MONTH
 DD=DAY
 
-SDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}-S/${FREQ}/${REG}
-cd $SDIR
+TDIR=SCPATH/${CONFIG}/${CONFIG}-${CASE}-S/${FREQ}/${REG}
+cd $TDIR
 
-echo "We are in " $SDIR
+echo "We are in " $TDIR
+
+SDIR=SOURCEDIR/${FREQ}/${YEAR}
 
 ulimit -s unlimited
 
@@ -30,16 +30,9 @@ if [ ! -f mesh_zgr.nc ]; then
 	cp MESHZFILE mesh_zgr.nc
 fi
 
-if [ ${VARNAME} == votemper ]; then
-	VARSAL=vosaline
-fi
-if [ ${VAR} == T ]; then
-	VARS=S
-fi
 
 
-for file in $(ls ${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}d${DD}.${FREQ}_${VAR}.nc); do
-	files=$(echo $file | sed "s/${VAR}.nc/${VARS}.nc/g")
+for file in $(ls $SDIR/${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}.${FREQ}_gridT.nc); do
 	fileo=${CONFIG}${SREG}-${CASE}_y${YYYY}m${MM}.${FREQ}_bottom_pressure.nc
 	if [ ! -f  $fileo ]; then
 		echo $fileo

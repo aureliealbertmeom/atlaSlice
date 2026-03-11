@@ -244,7 +244,7 @@ def set_up_all_scripts(machine,configuration,simulations,regions,members,variabl
                     else:
                         print('We are going to do '+str(operation)+' on variable '+str(var)+' in parallel by day')
                     incr_temp=pd.date_range(date_init,date_end,freq='D')
-                if operation == 'archive_extract' or operation == 'archive_daily_mean':
+                if operation == 'archive_extract' or operation == 'archive_daily_mean' or operation[:7] == 'compute':
                     print('We are going to archive variable '+str(var)+' month by month')
                     freq_par='1m'
                     incr_temp=pd.date_range(date_init,date_end,freq='M')
