@@ -2,7 +2,7 @@
 
 #MSUB -r slice               # Job name
 #MSUB -N 1                # Number of nodes to use
-#MSUB -n NPROCS                # Number of tasks to use
+#MSUB -n 10                # Number of tasks to use
 #MSUB -T 21600               # Elapsed time limit in seconds
 #MSUB -o slice.o%I           # Standard output. %I is the job id
 #MSUB -e slice.e%I           # Error output. %I is the job id
@@ -12,9 +12,9 @@
 #MSUB -m work,scratch
 
 
-NB_NPROC=NPROCS 
+NB_NPROC=10 
 
 source ~/.bashrc
 load_intel
 
-srun --multi-prog ./MPMDCONF
+srun --multi-prog ./tmp_mpmd_compute_bottom_pressure_irene_ORCA025.L75_OCCITENS.001_global_BOTPRES_1m_1981-01-01_1988-12-31.ksh

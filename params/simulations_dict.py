@@ -475,4 +475,4 @@ sim_date_end['ENS']['04']='2020-12-27'
 sim_date_init['ORCA025.L75']={}
 sim_date_end['ORCA025.L75']={}
 sim_date_init['ORCA025.L75']['OCCITENS.001']='1980-01-01'
-sim_date_end['ORCA025.L75']['OCCITENS.001']='1980-12-31'
+sim_date_end['ORCA025.L75']['OCCITENS.001']='2015-12-31'
