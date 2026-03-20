@@ -44,7 +44,7 @@ job='Y'
 
 # Period of the extraction
 # Must be in the format yyyy-mm-dd
-date_init='1989-01-01'
-date_end='1998-12-31'
+date_init='1999-01-01'
+date_end='2009-12-31'
 
 
