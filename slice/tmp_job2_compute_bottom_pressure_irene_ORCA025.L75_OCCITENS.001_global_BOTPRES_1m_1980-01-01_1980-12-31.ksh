@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #MSUB -r slice               # Job name
-#MSUB -N 2                # Number of tasks to use
-#MSUB -n 1                # Number of tasks to use
+#MSUB -N 1                # Number of tasks to use
+#MSUB -n 2                # Number of tasks to use
 #MSUB -T 21600               # Elapsed time limit in seconds
 #MSUB -o slice.o%I           # Standard output. %I is the job id
 #MSUB -e slice.e%I           # Error output. %I is the job id
