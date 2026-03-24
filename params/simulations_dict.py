@@ -1,4 +1,5 @@
 from functions import functions as f
+import numpy as np
 
 # Machines list
 
@@ -25,7 +26,10 @@ configuration_list['irene']=['ORCA025.L75']
 # All the simulations run with each configuration on each machine
 simulation_list={}
 simulation_list['irene']={}
-simulation_list['irene']['ORCA025.L75']=['OCCITENS.001']
+for k in np.arange(1,51,1):
+	kkk="{:03}".format(k)
+	sim='OCCITENS.'+str(kkk)  
+	simulation_list['irene']['ORCA025.L75']=[sim]
 
 simulation_list['adastra']={}
 simulation_list['adastra']['eNATL60']=['BLBT02','BLB002','BLBT01','BLB001','BLBT02X','BLB002X','grid']
@@ -46,7 +50,10 @@ simulation_list['jean-zay']['ENS']=['04']
 directory={}
 directory['irene']={}
 directory['irene']['ORCA025.L75']={}
-directory['irene']['ORCA025.L75']['OCCITENS.001']='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-OCCITENS.001-S'
+for k in np.arange(1,51,1):
+        kkk="{:03}".format(k)
+        sim='OCCITENS.'+str(kkk)
+        directory['irene']['ORCA025.L75'][sim]='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-'+str(sim)+'-S'
 
 directory['adastra']={}
 directory['adastra']['eNATL60']={}
@@ -95,7 +102,10 @@ for sim in ['CJM165']:
 
 stylenom['irene']={}
 stylenom['irene']['ORCA025.L75']={}
-stylenom['irene']['ORCA025.L75']['OCCITENS.001']='molines'
+for k in np.arange(1,51,1):
+        kkk="{:03}".format(k)
+        sim='OCCITENS.'+str(kkk)
+        stylenom['irene']['ORCA025.L75'][sim]='molines'
 
 stylenom['adastra']['eORCA36.L121']={}
 for simu in ['EXP15-10','EXP13-10','EXP22a-10','EXP22b-10','EXP22c-10','EXP22d-10','EXP22e-10','EXP22f-10','EXP22g-10','EXP22h-10','EXP09']:
@@ -264,8 +274,12 @@ for var in ['T','S','U','V','W','buoyancy','curloverf','BOTPRES']:
 
 vars_name={}
 vars_name['ORCA025.L75']={}
-vars_name['ORCA025.L75']['OCCITENS.001']={}
-vars_name['ORCA025.L75']['OCCITENS.001']['BOTPRES']='sobotpres'
+for k in np.arange(1,51,1):
+        kkk="{:03}".format(k)
+        sim='OCCITENS.'+str(kkk)
+        vars_name['ORCA025.L75'][sim]={}
+        vars_name['ORCA025.L75'][sim]['BOTPRES']='sobotpres'
+
 vars_name['eNATL60']={}
 for sim in ['BLBT02','BLB002','BLBT01','BLB001','BLBT02X','BLB002X']:
     vars_name['eNATL60'][sim]={'SSH':'sossheig','SSU':'sozocrtx','SSV':'somecrty','SST':'sosstsst','SSS':'sosaline','MLD':'somxl010',
@@ -292,8 +306,12 @@ vars_name['ENS']['04']['SSH']='sossheig'
 
 filetyp={}
 filetyp['ORCA025.L75']={}
-filetyp['ORCA025.L75']['OCCITENS.001']={}
-filetyp['ORCA025.L75']['OCCITENS.001']['BOTPRES']='gridT'
+for k in np.arange(1,51,1):
+        kkk="{:03}".format(k)
+        sim='OCCITENS.'+str(kkk)
+        filetyp['ORCA025.L75'][sim]={}
+        filetyp['ORCA025.L75'][sim]['BOTPRES']='gridT'
+
 filetyp['eNATL60']={}
 for sim in ['BLBT02','BLB002','BLBT02X','BLB002X']:
     filetyp['eNATL60'][sim]={'SSH':'gridT-2D','SSS':'gridT-2D','SST':'gridT-2D','MLD':'gridT-2D','SSU':'gridU-2D','SSV':'gridV-2D','T':'gridT',
@@ -390,7 +408,11 @@ compute_vars['BOTPRES']='T'
 
 frequencies={}
 frequencies['ORCA025.L75']={}
-frequencies['ORCA025.L75']['OCCITENS.001']={'BOTPRES':'1m'}
+for k in np.arange(1,51,1):
+        kkk="{:03}".format(k)
+        sim='OCCITENS.'+str(kkk)
+        frequencies['ORCA025.L75'][sim]={'BOTPRES':'1m'}
+
 frequencies['ENS']={}
 frequencies['ENS']['04']={'SSH':'1d'}
 frequencies['eNATL60']={}
@@ -407,7 +429,11 @@ frequencies_file={}
 frequencies_file['ENS']={}
 frequencies_file['ENS']['04']={}
 frequencies_file['ORCA025.L75']={}
-frequencies_file['ORCA025.L75']['OCCITENS.001']={'BOTPRES':'1m'}
+for k in np.arange(1,51,1):
+        kkk="{:03}".format(k)
+        sim='OCCITENS.'+str(kkk)
+        frequencies_file['ORCA025.L75'][sim]={'BOTPRES':'1m'}
+
 frequencies_file['ENS']['04']['SSH']='2y'
 #frequencies_file['ENS']['04']['SSH']='1d'
 frequencies_file['eNATL60']={}
@@ -474,5 +500,8 @@ sim_date_end['ENS']['04']='2020-12-27'
 
 sim_date_init['ORCA025.L75']={}
 sim_date_end['ORCA025.L75']={}
-sim_date_init['ORCA025.L75']['OCCITENS.001']='1980-01-01'
-sim_date_end['ORCA025.L75']['OCCITENS.001']='2015-12-31'
+for k in np.arange(1,51,1):
+        kkk="{:03}".format(k)
+        sim='OCCITENS.'+str(kkk)
+        sim_date_init['ORCA025.L75'][sim]='1980-01-01'
+        sim_date_end['ORCA025.L75'][sim]='2015-12-31'
