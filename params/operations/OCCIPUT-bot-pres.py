@@ -19,7 +19,7 @@ configuration='ORCA025.L75'
 
 # Name of the simulation, experiment or run
 # It must be one of the simulations for the above configuration stored on the above machine
-simulations=['OCCITENS.002']
+simulations=['OCCITENS.003']
 
 # Name of the regions considered for extraction
 # It must have been defined for the selected configuration
@@ -44,7 +44,7 @@ job='Y'
 
 # Period of the extraction
 # Must be in the format yyyy-mm-dd
-date_init='1989-01-01'
+date_init='1980-01-01'
 date_end='2015-12-31'
 
 
