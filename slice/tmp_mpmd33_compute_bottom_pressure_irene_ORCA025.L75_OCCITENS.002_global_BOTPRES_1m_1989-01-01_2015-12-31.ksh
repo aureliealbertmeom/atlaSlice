@@ -1,0 +1,4 @@
+0 ./tmp_script_compute_bottom_pressure_irene_ORCA025.L75_OCCITENS.002_global_BOTPRES_1m_2015-09.ksh
+1 ./tmp_script_compute_bottom_pressure_irene_ORCA025.L75_OCCITENS.002_global_BOTPRES_1m_2015-10.ksh
+2 ./tmp_script_compute_bottom_pressure_irene_ORCA025.L75_OCCITENS.002_global_BOTPRES_1m_2015-11.ksh
+3 ./tmp_script_compute_bottom_pressure_irene_ORCA025.L75_OCCITENS.002_global_BOTPRES_1m_2015-12.ksh
