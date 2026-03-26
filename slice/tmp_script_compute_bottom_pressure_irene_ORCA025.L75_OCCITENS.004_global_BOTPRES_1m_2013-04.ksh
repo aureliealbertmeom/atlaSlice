@@ -14,7 +14,7 @@ cd $TDIR
 
 echo "We are in " $TDIR
 
-SDIR=/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-OCCITENS.004-S/${FREQ}/2013
+SDIR=/ccc/scratch/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-OCCITENS.004-S/${FREQ}/2013
 
 ulimit -s unlimited
 

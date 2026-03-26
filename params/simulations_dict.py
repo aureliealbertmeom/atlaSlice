@@ -53,7 +53,7 @@ directory['irene']['ORCA025.L75']={}
 for k in np.arange(1,51,1):
         kkk="{:03}".format(k)
         sim='OCCITENS.'+str(kkk)
-        directory['irene']['ORCA025.L75'][sim]='/ccc/work/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-'+str(sim)+'-S'
+        directory['irene']['ORCA025.L75'][sim]='/ccc/scratch/cont003/gen12020/alberaur/ORCA025.L75/ORCA025.L75-'+str(sim)+'-S'
 
 directory['adastra']={}
 directory['adastra']['eNATL60']={}
