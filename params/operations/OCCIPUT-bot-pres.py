@@ -19,7 +19,7 @@ configuration='ORCA025.L75'
 
 # Name of the simulation, experiment or run
 # It must be one of the simulations for the above configuration stored on the above machine
-simulations=['OCCITENS.004','OCCITENS.005','OCCITENS.006','OCCITENS.007','OCCITENS.008','OCCITENS.009']
+simulations=['OCCITENS.005','OCCITENS.006','OCCITENS.007','OCCITENS.008','OCCITENS.009']
 
 # Name of the regions considered for extraction
 # It must have been defined for the selected configuration

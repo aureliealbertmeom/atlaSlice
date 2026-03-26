@@ -83,5 +83,5 @@ mprocs['archive_daily_mean']=30
 mprocs['compute_buoyancy']=10
 mprocs['compute_curl']=10
 mprocs['compute_curloverf']=10
-mprocs['compute_bottom_pressure']=10
+mprocs['compute_bottom_pressure']=50
 mprocs['prof_flux_filt_inboxes']=10
